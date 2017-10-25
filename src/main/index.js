@@ -11,6 +11,9 @@ import { startClipboardWatch, stopClipboardWatch } from './clipboard-watch'
 // this has some effect on it being used??
 // this has some effect on it being used??
 console.log(typeof globalShortcut.unregisterAll)
+// this has some effect on it being used??
+// this has some effect on it being used??
+// this has some effect on it being used??
 
 
 
@@ -23,18 +26,21 @@ if (IS_DEV_MODE) enableLiveReload()
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
+// Some description
+let willQuitApp = false
+
 const createWindow = async () => {
-  // Create the browser window.
+  // Create the browser window
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     show: false,
   })
 
-  // and load the index.html of the app.
+  // load the index.html of the app
   mainWindow.loadURL(INDEX_HTML_PATH)
 
-  // Open the DevTools.
+  // Open the DevTools
   if (IS_DEV_MODE) {
     await installExtension(VUEJS_DEVTOOLS)
     mainWindow.webContents.openDevTools()
@@ -46,7 +52,20 @@ const createWindow = async () => {
     startClipboardWatch(mainWindow)
   })
 
-  // Emitted when the window is closed.
+  // fires before 'closed' event,
+  // checks if the user wants to quit the app or just close it
+  mainWindow.on('close', (event) => {
+    // the user tried to quit the app
+    if (willQuitApp) {
+      mainWindow = null
+    } else {
+    // the user only tried to close the window, not quit the app
+      event.preventDefault()
+      mainWindow.hide()
+    }
+  })
+
+  // Emitted when the window is fully closed.
   mainWindow.on('closed', () => {
     mainWindow = null
     log('app window closed')
@@ -55,7 +74,6 @@ const createWindow = async () => {
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   log('app started')
   createWindow()
@@ -68,17 +86,24 @@ app.on('quit', () => {
   log('app quit')
 })
 
+// 'activate' is emitted when the user clicks the Dock icon (OS X)
+app.on('activate', () => {
+  // OS X: re-create a window in the app when the dock icon is clicked
+  // and the window is not open
+  if (!mainWindow.isVisible()) {
+    createWindow()
+  }
+})
+
+// 'before-quit' is emitted when Electron receives the signal to exit and wants
+// to start closing windows
+app.on('before-quit', () => willQuitApp = true)
 
 
 
 
 
 
-// app.on('activate', () => {
-//   // On OS X it's common to re-create a window in the app when the
-//   // dock icon is clicked and there are no other windows open.
-//   if (mainWindow === null) {
-//     createWindow()
-//   }
-// })
 
+// console.log('mainWindow.isVisible()', mainWindow.isVisible())
+// console.log('mainWindow.isMinimized()', mainWindow.isMinimized())
