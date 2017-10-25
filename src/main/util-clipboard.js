@@ -30,7 +30,7 @@ export const startClipboardWatch = () => {
     const valueChanged = newValue && newValue !== oldValue
 
     if (valueChanged) {
-      log('clipboard has new value')
+      log('clipboard has new value: %o', newValue)
       handleNewValue(newValue, oldValue)
       oldValue = newValue
     }

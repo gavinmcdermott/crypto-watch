@@ -88,13 +88,14 @@ app.on('quit', () => {
 // 'activate' is emitted when the user clicks the Dock icon (OS X)
 app.on('activate', () => {
   log('app activating')
-  const willCreateNewWindow = !mainWindow.isVisible() && !mainWindow.isMinimized()
+  const appNeedsNewWindow = !mainWindow.isVisible() && !mainWindow.isMinimized()
 
   // OS X: re-create a window in the app when the dock icon is clicked
   // and the window is not open
-  if (willCreateNewWindow) {
-    console.log('IM in HERE?!')
+  if (appNeedsNewWindow) {
     createWindow()
+  } else {
+    log('app window already created and active')
   }
 })
 
@@ -103,4 +104,15 @@ app.on('activate', () => {
 app.on('before-quit', () => willQuitApp = true)
 
 // TODO: fix me based on the state of the app
-ipcMain.on('notifier_open', (e,d,f) => console.log('GOT IT!!', e,d, f))
+ipcMain.on('notify_main_proc', (type, opts) => {
+  // NOTIFICATION_CLICKED
+  // opts. newVal, oldVal
+  // BEST WAY TO GET VALUES TO RENDER PROCESS?
+
+  const appIsOpenAndNotFocused = mainWindow.isVisible() && !mainWindow.isFocused()
+  const appIsMinimized = mainWindow.isMinimized()
+  const appNeedsNewWindow = !mainWindow.isVisible() && !mainWindow.isMinimized()
+
+  if (appIsOpenAndNotFocused || appIsMinimized) return mainWindow.show()
+  if (appNeedsNewWindow) return createWindow()
+})
