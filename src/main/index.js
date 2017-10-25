@@ -27,7 +27,7 @@ if (IS_DEV_MODE) enableLiveReload()
 let mainWindow
 
 // Some description
-let willQuitApp = false
+let isQuittingApp = false
 
 const createWindow = async () => {
   // Create the browser window
@@ -55,20 +55,19 @@ const createWindow = async () => {
   // fires before 'closed' event,
   // checks if the user wants to quit the app or just close it
   mainWindow.on('close', (event) => {
-    // the user tried to quit the app
-    if (willQuitApp) {
-      mainWindow = null
-    } else {
+    // the user is quitting the entire app
     // the user only tried to close the window, not quit the app
+    if (!isQuittingApp) {
+      log('app window closed (app is still running in background)')
       event.preventDefault()
       mainWindow.hide()
     }
   })
 
-  // Emitted when the window is fully closed.
+  // Emitted when the app is quit, not when it is just closed
   mainWindow.on('closed', () => {
+    log('app window released from memory')
     mainWindow = null
-    log('app window closed')
   })
 }
 
@@ -88,6 +87,7 @@ app.on('quit', () => {
 
 // 'activate' is emitted when the user clicks the Dock icon (OS X)
 app.on('activate', () => {
+  log('app activating')
   // OS X: re-create a window in the app when the dock icon is clicked
   // and the window is not open
   if (!mainWindow.isVisible()) {
@@ -97,7 +97,7 @@ app.on('activate', () => {
 
 // 'before-quit' is emitted when Electron receives the signal to exit and wants
 // to start closing windows
-app.on('before-quit', () => willQuitApp = true)
+app.on('before-quit', () => isQuittingApp = true)
 
 
 
