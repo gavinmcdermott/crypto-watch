@@ -1,13 +1,16 @@
 import { ipcMain, Notification, webContents } from 'electron'
 import { log, logError } from '../common/debug'
-import { ethereum } from '../common/util-crypto'
+import { ethereum } from '../common/crypto'
+
+const IPC_MAIN_EVT_TYPE = 'NOTIFIER_CLICKED'
 
 Notification.prototype.notifyMainProc = (newVal, oldVal) => {
   const opts = {
     newVal: newVal,
     oldVal: oldVal
   }
-  ipcMain.emit('notify_main_proc', 'NOTIFICATION_CLICKED', opts)
+  ipcMain.emit('notifier_main', IPC_MAIN_EVT_TYPE, opts)
+  ipcMain.emit('notifier_render', IPC_MAIN_EVT_TYPE, opts)
 }
 
 export class EthNotifier extends Notification {
