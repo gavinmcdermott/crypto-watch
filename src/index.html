@@ -5,18 +5,14 @@
     <title>Crypto Watch</title>
   </head>
   <body>
-    <h3>0x0A860fbdbb2A9acB0fE1d7C7da1b35C2cF1bE751</h3>
-    <div id="test"></div>
+    <h3>Test ETH Address:</h3>
+    <p>0x0A860fbdbb2A9acB0fE1d7C7da1b35C2cF1bE751</p>
+    <p>Our developing Vue.js app is rendered below here</p>
+    <hr>
+    <div id="app"></div>
   </body>
 
   <script>
-    import render from './render/index.js'
-    import Vue from 'vue';
-    import Test from './test';
-
-    const app = new Vue(Test).$mount('#test');
-
-    app.text = "Electron Forge with Vue.js!";
-
+    import render from './render/index'
   </script>
 </html>

@@ -1,4 +1,4 @@
-import { ipcMain, Notification, webContents } from 'electron'
+import { ipcMain, Notification } from 'electron'
 import { log, logError } from '../common/debug'
 import { ethereum } from '../common/crypto'
 

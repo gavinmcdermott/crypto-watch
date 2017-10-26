@@ -32,8 +32,8 @@ let willQuitApp = false
 const createWindow = async () => {
   // Create the browser window
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 400,
     show: false,
   })
 
@@ -127,3 +127,14 @@ ipcMain.on('notifier_main', (type, opts) => {
   if (appIsOpenAndNotFocused || appIsMinimized) return mainWindow.show()
   if (appNeedsNewWindow) return createWindow()
 })
+
+
+ipcMain.on('notifier_render', (type, opts) => {
+  mainWindow.webContents.send('test', opts)
+})
+
+
+
+
+
+

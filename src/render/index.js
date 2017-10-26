@@ -1,6 +1,20 @@
-import { ipcRenderer } from 'electron'
-import { log, logError } from '../common/debug'
+import Vue from 'vue'
+import App from './App.vue'
 
-ipcRenderer.on('clipboard_changed', (e, d) => {
-  log('captured in render process', e, d)
-})
+// import { ipcRenderer } from 'electron'
+// import { log, logError } from '../common/debug'
+
+
+
+
+// Point of app injection
+const app = new Vue(App).$mount('#app')
+
+
+
+
+
+
+// ipcRenderer.on('clipboard_changed', (e, d) => {
+//   log('captured in render process', e, d)
+// })
