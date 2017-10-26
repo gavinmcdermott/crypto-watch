@@ -6,7 +6,7 @@
 </template>
 
 <script>
-  import ClipboardAddress from './components/ClipboardAddress'
+  import ClipboardAddress from './ClipboardAddress'
 
   export default {
     name: 'App',

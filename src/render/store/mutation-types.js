@@ -1,0 +1,1 @@
+export const UPDATE_CLIPBOARD = 'UPDATE_CLIPBOARD'

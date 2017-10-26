@@ -1,20 +1,12 @@
 import Vue from 'vue'
-import App from './App.vue'
+import store from './store'
+import App from './components/App.vue'
 
-// import { ipcRenderer } from 'electron'
-// import { log, logError } from '../common/debug'
+// vuex
+// Vue.use(Vuex)
 
-
-
-
-// Point of app injection
-const app = new Vue(App).$mount('#app')
-
-
-
-
-
-
-// ipcRenderer.on('clipboard_changed', (e, d) => {
-//   log('captured in render process', e, d)
-// })
+new Vue({
+  el: '#app',
+  store,
+  render: h => h(App)
+})

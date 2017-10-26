@@ -1,29 +1,42 @@
 <template>
   <div id="address">
-    <p>Current clipboard address: {{address}}</p>
+    <p>Current clipboard: {{current}}</p>
+    <p>Previous clipboard: {{previous}}</p>
   </div>
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   import { ipcRenderer } from 'electron'
   import { log, logError } from '../../common/debug'
+  import { UPDATE_CLIPBOARD } from '../store/mutation-types'
+
+  console.log(UPDATE_CLIPBOARD)
 
   export default {
     name: 'clipboard-address',
+    // data () {
+    //   return {
+    //     current: '',
+    //     previous: ''
+    //   }
+    // },
     mounted () {
-      let context = this
-      console.log(this)
-      console.log(context)
-      ipcRenderer.on('test', (sender, data) => {
+      ipcRenderer.on('test', (event, data) => {
+        console.log(this.$store)
         console.log(data)
-        console.log(context)
-        console.log(this)
-        context.address = data.newVal
+        this.$store.commit(UPDATE_CLIPBOARD, data) // sync so it commits
       })
     },
-    data () {
-      return {
-        address: '',
+    computed: {
+      current () {
+        // console.log(this.$store.getters)
+        // return this.$store.getters['clipboard/current']
+        return this.$store.getters.clipboardVal
+      },
+      previous () {
+        // return this.$store.getters['clipboard/previous']
+        return this.$store.getters.clipboardPrevVal
       }
     }
   }
