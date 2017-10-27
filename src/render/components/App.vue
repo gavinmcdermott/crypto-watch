@@ -2,12 +2,12 @@
   <div>
     <h2>Hello from {{text}}</h2>
     <clipboard-address></clipboard-address>
-    <div v-for="(step, idx) in flow.steps">
+    <div v-for="(item, index) in checklist.items">
       <currency-tile
-        :index="idx"
-        :title="step.title"
-        :current-state="step.currentState"
-        :states="step.states">
+        :index="index"
+        :title="item.title"
+        :state="item.state"
+        :states="item.states">
       </currency-tile>
     </div>
     <hr>
@@ -30,11 +30,8 @@
       }
     },
     computed: {
-      flow () {
-        console.log('------------------------------')
-        console.log(this.$store.getters.flow)
-        console.log('------------------------------')
-        return this.$store.getters.flow
+      checklist () {
+        return this.$store.getters.checklist
       },
     }
   }

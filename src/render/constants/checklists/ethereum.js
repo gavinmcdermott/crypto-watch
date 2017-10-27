@@ -1,15 +1,9 @@
 import { ETHEREUM } from '../currency'
+import ITEM_STATES from './item-states'
 
-const DEFAULT_STATE = 'INITIAL'
+const DEFAULT_STATE = ITEM_STATES.INITIAL
 
-const STEP_STATES = {
-  INITIAL: 'INITIAL',
-  SUCCESS: 'SUCCESS',
-  ERROR: 'ERROR',
-  DETAIL: 'DETAIL',
-}
-
-const STEPS = {
+const CHECKLIST_ITEMS = {
   ADDR_COPIED: 'ADDR_COPIED',
   ADDR_VERIFIED: 'ADDR_VERIFIED',
   TX_INFO_ENTERED: 'TX_INFO_ENTERED',
@@ -18,90 +12,90 @@ const STEPS = {
 
 export default {
   name: ETHEREUM.name,
-  steps: [
+  items: [
     {
-      title: STEPS.ADDR_COPIED,
-      currentState: DEFAULT_STATE,
+      title: CHECKLIST_ITEMS.ADDR_COPIED,
+      state: DEFAULT_STATE,
       states: {
-        INITIAL: {
+        [ITEM_STATES.INITIAL]: {
           title: 'INITIAL title text',
           icon: '//some_path_to_icon'
         },
-        SUCCESS: {
+        [ITEM_STATES.SUCCESS]: {
           title: 'SUCCESS title text',
           icon: '//some_path_to_icon'
         },
-        ERROR: {
+        [ITEM_STATES.ERROR]: {
           title: 'ERROR title text',
           icon: '//some_path_to_icon'
         },
-        DETAIL: {
+        [ITEM_STATES.DETAIL]: {
           title: 'DETAIL title text',
           icon: '//some_path_to_icon'
         },
       },
     },
     {
-      title: STEPS.ADDR_VERIFIED,
-      currentState: DEFAULT_STATE,
+      title: CHECKLIST_ITEMS.ADDR_VERIFIED,
+      state: DEFAULT_STATE,
       states: {
-        INITIAL: {
-          title: 'INITIAL title text',
+        [ITEM_STATES.INITIAL]: {
+          title: 'INITIAL title text here too',
           icon: '//some_path_to_icon'
         },
-        SUCCESS: {
+        [ITEM_STATES.SUCCESS]: {
           title: 'SUCCESS title text',
           icon: '//some_path_to_icon'
         },
-        ERROR: {
+        [ITEM_STATES.ERROR]: {
           title: 'ERROR title text',
           icon: '//some_path_to_icon'
         },
-        DETAIL: {
+        [ITEM_STATES.DETAIL]: {
           title: 'DETAIL title text',
           icon: '//some_path_to_icon'
         },
       }
     },
     {
-      title: STEPS.TX_INFO_ENTERED,
-      currentState: DEFAULT_STATE,
+      title: CHECKLIST_ITEMS.TX_INFO_ENTERED,
+      state: DEFAULT_STATE,
       states: {
-        INITIAL: {
+        [ITEM_STATES.INITIAL]: {
           title: 'INITIAL title text',
           icon: '//some_path_to_icon'
         },
-        SUCCESS: {
+        [ITEM_STATES.SUCCESS]: {
           title: 'SUCCESS title text',
           icon: '//some_path_to_icon'
         },
-        ERROR: {
+        [ITEM_STATES.ERROR]: {
           title: 'ERROR title text',
           icon: '//some_path_to_icon'
         },
-        DETAIL: {
+        [ITEM_STATES.DETAIL]: {
           title: 'DETAIL title text',
           icon: '//some_path_to_icon'
         },
       }
     },
     {
-      title: STEPS.ADD_PASTED,
-      currentState: DEFAULT_STATE,
+      title: CHECKLIST_ITEMS.ADD_PASTED,
+      state: DEFAULT_STATE,
       states: {
-        INITIAL: {
+        [ITEM_STATES.INITIAL]: {
           title: 'INITIAL title text',
           icon: '//some_path_to_icon'
         },
-        SUCCESS: {
+        [ITEM_STATES.SUCCESS]: {
           title: 'SUCCESS title text',
           icon: '//some_path_to_icon'
         },
-        ERROR: {
+        [ITEM_STATES.ERROR]: {
           title: 'ERROR title text',
           icon: '//some_path_to_icon'
         },
-        DETAIL: {
+        [ITEM_STATES.DETAIL]: {
           title: 'DETAIL title text',
           icon: '//some_path_to_icon'
         },

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import clipboard from './modules/clipboard'
-import currencyFlows from './modules/currency-flows'
+import checklists from './modules/checklists'
 import currency from './modules/currency'
 
 Vue.use(Vuex)
@@ -12,7 +12,7 @@ export default new Vuex.Store({
   modules: {
     clipboard,
     currency,
-    currencyFlows,
+    checklists,
   },
   strict: debug,
 })

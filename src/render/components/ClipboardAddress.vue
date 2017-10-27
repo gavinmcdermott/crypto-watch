@@ -9,16 +9,14 @@
   import { mapGetters } from 'vuex'
   import { ipcRenderer } from 'electron'
   import { log, logError } from '../../common/debug'
-  import { UPDATE_CLIPBOARD } from '../constants/mutation-types'
+  import { SET_CLIPBOARD } from '../constants/mutation-types'
 
   export default {
     name: 'clipboard-address',
     mounted () {
       // TODO: make sure we don't double register this handler!
       ipcRenderer.on('test', (event, data) => {
-        console.log(this.$store)
-        console.log(data)
-        this.$store.commit(UPDATE_CLIPBOARD, data) // sync so it commits
+        this.$store.commit(SET_CLIPBOARD, data)
       })
     },
     computed: {
