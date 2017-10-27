@@ -1,5 +1,5 @@
 <template>
-  <div id="address">
+  <div>
     <p>Current clipboard: {{current}}</p>
     <p>Previous clipboard: {{previous}}</p>
   </div>
@@ -9,19 +9,12 @@
   import { mapGetters } from 'vuex'
   import { ipcRenderer } from 'electron'
   import { log, logError } from '../../common/debug'
-  import { UPDATE_CLIPBOARD } from '../store/mutation-types'
-
-  console.log(UPDATE_CLIPBOARD)
+  import { UPDATE_CLIPBOARD } from '../constants/mutation-types'
 
   export default {
     name: 'clipboard-address',
-    // data () {
-    //   return {
-    //     current: '',
-    //     previous: ''
-    //   }
-    // },
     mounted () {
+      // TODO: make sure we don't double register this handler!
       ipcRenderer.on('test', (event, data) => {
         console.log(this.$store)
         console.log(data)
@@ -30,12 +23,9 @@
     },
     computed: {
       current () {
-        // console.log(this.$store.getters)
-        // return this.$store.getters['clipboard/current']
         return this.$store.getters.clipboardVal
       },
       previous () {
-        // return this.$store.getters['clipboard/previous']
         return this.$store.getters.clipboardPrevVal
       }
     }
@@ -43,12 +33,5 @@
 </script>
 
 <style scoped>
-  #address {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
-  }
+
 </style>

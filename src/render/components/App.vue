@@ -2,21 +2,40 @@
   <div>
     <h2>Hello from {{text}}</h2>
     <clipboard-address></clipboard-address>
+    <div v-for="(step, idx) in flow.steps">
+      <currency-tile
+        :index="idx"
+        :title="step.title"
+        :current-state="step.currentState"
+        :states="step.states">
+      </currency-tile>
+    </div>
+    <hr>
   </div>
 </template>
 
 <script>
   import ClipboardAddress from './ClipboardAddress'
+  import CurrencyTile from './CurrencyTile'
 
   export default {
     name: 'App',
     components: {
-      ClipboardAddress: ClipboardAddress
+      ClipboardAddress,
+      CurrencyTile,
     },
     data () {
       return {
-         text: 'our new vue app!'
+         text: 'CryptoWatch™'
       }
+    },
+    computed: {
+      flow () {
+        console.log('------------------------------')
+        console.log(this.$store.getters.flow)
+        console.log('------------------------------')
+        return this.$store.getters.flow
+      },
     }
   }
 </script>
