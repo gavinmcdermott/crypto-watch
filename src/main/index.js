@@ -4,6 +4,7 @@ import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import { enableLiveReload } from 'electron-compile'
 import { log, logError } from '../common/debug'
 import { startClipboardWatch, stopClipboardWatch } from './clipboard-watch'
+import registerShortcuts from './keyboard'
 
 
 
@@ -76,6 +77,12 @@ const createWindow = async () => {
 app.on('ready', () => {
   log('app started')
   createWindow()
+
+
+  registerShortcuts()
+
+
+
 })
 
 app.on('quit', () => {
