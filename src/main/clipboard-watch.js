@@ -99,4 +99,3 @@ export const stopClipboardWatch = () => {
   clipboard.clear()
   log('clipboard watch stopped')
 }
-

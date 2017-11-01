@@ -4,19 +4,7 @@ import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import { enableLiveReload } from 'electron-compile'
 import { log, logError } from '../common/debug'
 import { startClipboardWatch, stopClipboardWatch } from './clipboard-watch'
-import registerShortcuts from './keyboard'
-
-
-
-// this has some effect on it being used??
-// this has some effect on it being used??
-// this has some effect on it being used??
-console.log(typeof globalShortcut.unregisterAll)
-// this has some effect on it being used??
-// this has some effect on it being used??
-// this has some effect on it being used??
-
-
+import keyboard from './keyboard'
 
 const IS_DEV_MODE = process.execPath.match(/[\\/]electron/)
 const INDEX_HTML_PATH = `file://${path.resolve(__dirname, '../index.html')}`
@@ -79,7 +67,7 @@ app.on('ready', () => {
   createWindow()
 
 
-  registerShortcuts()
+  keyboard.lock()
 
 
 
@@ -87,6 +75,7 @@ app.on('ready', () => {
 
 app.on('quit', () => {
   globalShortcut.unregisterAll()
+  keyboard.unlock()
   stopClipboardWatch()
   clipboard.clear()
   log('app quit')

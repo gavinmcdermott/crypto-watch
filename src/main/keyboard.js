@@ -1,7 +1,6 @@
 import robot from 'robotjs'
-import { globalShortcut, ipcMain } from 'electron'
+import { globalShortcut } from 'electron'
 import { log, logError } from '../common/debug'
-
 
 const EMPTY_STR = ''
 
@@ -22,24 +21,20 @@ const KEYS_TO_BE_LOCKED = LETTERS.concat(NUMBERS, PUNCTUATIONS, FUNCS, NAMED_KEY
 // Key modifiers (needed to register in addition to keys)
 const KEY_MODIFIERS = [
   EMPTY_STR, // needed in order to register all individual keys too
-  'CmdOrCtrl',
-  'Shift',
-  'Alt',
-  'Shift+Alt',
-  'Shift+CmdOrCtrl',
+  'Alt+',
+  'Shift+',
+  'CmdOrCtrl+',
+  'Shift+Alt+',
+  'Shift+CmdOrCtrl+',
 ]
 
-// Do not lock these key commands
+// Do not lock these key commands when protecting the user
 const ACTIVE_COMMANDS_WHEN_LOCKED = [
   'CmdOrCtrl+Tab',  // allow switching between apps
   'CmdOrCtrl+C',    // allow copy
   'CmdOrCtrl+V',    // allow paste
   'CmdOrCtrl+Q',    // allow quitting the app
 ]
-
-
-
-
 
 const shouldLockCommand = (keyCommand) => {
   let leaveActive = false
@@ -49,57 +44,40 @@ const shouldLockCommand = (keyCommand) => {
   return leaveActive
 }
 
-
 const registerShortcuts = () => {
   KEY_MODIFIERS.forEach((keyModifier) => {
+    // create a new iterator for each key modifier
+    const keys = KEYS_TO_BE_LOCKED[Symbol.iterator]()
 
-    const LOCKED = KEYS_TO_BE_LOCKED[Symbol.iterator]()
-
-    for (let key of LOCKED) {
+    for (let key of keys) {
       let commandString = key
 
       if (keyModifier !== EMPTY_STR) {
-        commandString = `${keyModifier}+${key}`
+        commandString = `${keyModifier}${key}`
       }
 
       if (!shouldLockCommand(commandString)) {
-        log('> LOCKING: ', commandString)
-        let foo = globalShortcut.register(commandString, () => {
-          log(`PREVENTED ${commandString} at: ${Math.random().toFixed(4)}`)
+        let locked = globalShortcut.register(commandString, () => {
+          log(`Keypress prevented (${commandString}) at ${new Date().getTime()}`)
         })
-        if (!foo) logError('could not register: ', commandString)
+        if (locked) {
+          log(`Keyboard locking ${commandString}`)
+        } else {
+          logError(`Keyboard failed to lock ${commandString}`)
+        }
       } else {
-        log('> NOT LOCKING: ', commandString)
+        log(`Keyboard leaving ${commandString} active`)
       }
     }
-
-    console.log('=========================\n')
   })
 }
 
-
-
-
-// Testing keyboard locking
-export default registerShortcuts
-
-
-
-
-
-// globalShortcut.register('CmdOrCtrl+V', () => {
-//   console.log('captured the paste')
-
-//   // robot.keyToggle('command', 'down')
-
-//   // robot.keyToggle('shift', 'down')
-//   globalShortcut.unregisterAll()
-//   setTimeout(() => {
-//     console.log('should have pasted:', clipboard.readText())
-//     robot.keyTap('v', 'command')
-
-//     // const text = clipboard.readText()
-//     // console.log('passed the copy of: ', text)
-//   }, 500)
-// })
-
+// TODO: better error handling
+export default {
+  lock: () => {
+    registerShortcuts()
+  },
+  unlock: () => {
+    globalShortcut.unregisterAll()
+  },
+}
