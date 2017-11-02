@@ -1,6 +1,6 @@
 import robot from 'robotjs'
 import { globalShortcut } from 'electron'
-import { log, logError } from '../common/debug'
+import { log, logError } from '../../common/debug'
 
 const EMPTY_STR = ''
 
@@ -30,10 +30,10 @@ const KEY_MODIFIERS = [
 
 // Do not lock these key commands when protecting the user
 const ACTIVE_COMMANDS_WHEN_LOCKED = [
-  'CmdOrCtrl+Tab',  // allow switching between apps
-  'CmdOrCtrl+C',    // allow copy
-  'CmdOrCtrl+V',    // allow paste
-  'CmdOrCtrl+Q',    // allow quitting the app
+  'CmdOrCtrl+Q',    // quitting the app
+  'CmdOrCtrl+Tab',  // switching between apps
+  // 'CmdOrCtrl+C',    // copy
+  // 'CmdOrCtrl+V',    // paste
 ]
 
 const shouldLockCommand = (keyCommand) => {
@@ -44,7 +44,7 @@ const shouldLockCommand = (keyCommand) => {
   return leaveActive
 }
 
-const registerShortcuts = () => {
+export const lockKeys = () => {
   KEY_MODIFIERS.forEach((keyModifier) => {
     // create a new iterator for each key modifier
     const keys = KEYS_TO_BE_LOCKED[Symbol.iterator]()
@@ -72,12 +72,6 @@ const registerShortcuts = () => {
   })
 }
 
-// TODO: better error handling
-export default {
-  lock: () => {
-    registerShortcuts()
-  },
-  unlock: () => {
-    globalShortcut.unregisterAll()
-  },
+export const unlockKeys = () => {
+  globalShortcut.unregisterAll()
 }

@@ -1,10 +1,13 @@
 import path from 'path'
-import { app, BrowserWindow, clipboard, globalShortcut, ipcMain } from 'electron'
+import { app, BrowserWindow, clipboard, ipcMain } from 'electron'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import { enableLiveReload } from 'electron-compile'
 import { log, logError } from '../common/debug'
-import { startClipboardWatch, stopClipboardWatch } from './clipboard-watch'
+// import clipboardWatch from './clipboard-watch'
+// import keyboard from './keyboard'
 import keyboard from './keyboard'
+
+console.log(keyboard)
 
 const IS_DEV_MODE = process.execPath.match(/[\\/]electron/)
 const INDEX_HTML_PATH = `file://${path.resolve(__dirname, '../index.html')}`
@@ -37,7 +40,6 @@ const createWindow = async () => {
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
-    startClipboardWatch()
     log('app window created')
   })
 
@@ -65,19 +67,12 @@ const createWindow = async () => {
 app.on('ready', () => {
   log('app started')
   createWindow()
-
-
-  keyboard.lock()
-
-
-
+  keyboard.copy.startWatch()
 })
 
 app.on('quit', () => {
-  globalShortcut.unregisterAll()
   keyboard.unlock()
-  stopClipboardWatch()
-  clipboard.clear()
+  keyboard.copy.stopWatch()
   log('app quit')
 })
 
@@ -108,7 +103,10 @@ app.on('before-quit', () => willQuitApp = true)
 
 
 
-// IN A SEPARATE FILE?
+
+
+
+// IN A SEPARATE FILE? CLEAN UP THIS API FROM NOTIFIER!
 
 // TODO: fix me based on the state of the app
 ipcMain.on('notifier_main', (type, opts) => {
