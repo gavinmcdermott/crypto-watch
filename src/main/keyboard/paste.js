@@ -4,8 +4,6 @@ import { log, logError } from '../../common/debug'
 import { lockKeys } from './lock'
 
 // TODO: GREAT ERROR HANDLING IN THESE CASES!
-
-// TODO: Abstract main process constants folder!
 const PASTE_COMMAND = 'CmdOrCtrl+V'
 
 // NOTE!!!

@@ -1,9 +1,9 @@
 import { clipboard, ipcMain } from 'electron'
 import { log, logError } from '../../common/debug'
 import { ethereum } from '../../common/crypto'
+import { CURRENCIES } from '../../constants/currency'
+import { EVENT_TYPES } from '../../constants/events'
 import { notifyUser } from '../notifier'
-import { CURRENCY_TYPES } from '../constants/currency'
-import { EVENT_TYPES } from '../constants/events'
 
 const WATCH_INTERVAL_MILLI = 111
 
@@ -18,9 +18,9 @@ const handleNewClipboardValue = (newValue, oldValue) => {
   if (!validCryptoAddr) return
 
   if (validEthAddr) {
-    log(`${CURRENCY_TYPES.ETH} address copied: ${newValue}`)
+    log(`${CURRENCIES.Ethereum.name} address copied: ${newValue}`)
     notifyUser({
-      currency: CURRENCY_TYPES.ETH,
+      currency: CURRENCIES.Ethereum.name,
       address: newValue,
     })
   }

@@ -1,4 +1,4 @@
-import { SET_CLIPBOARD } from '../../constants/mutation-types'
+import { SET_CLIPBOARD } from '../../../constants/vue/mutation-types'
 // Learning from: https://github.com/vuejs/vuex/blob/dev/examples/shopping-cart/store/modules/cart.js
 
 // Initial state

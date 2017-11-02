@@ -1,7 +1,7 @@
 import { ipcMain, Notification } from 'electron'
 import { log, logError } from '../common/debug'
-import { CURRENCY_TYPES } from './constants/currency'
-import { EVENT_TYPES } from './constants/events'
+import { EVENT_TYPES } from '../constants/events'
+import { CURRENCIES } from '../constants/currency'
 
 const notifyProcess = ({ currency, address }) => {
   const opts = {
@@ -20,7 +20,7 @@ export const notifyUser = ({ currency, address }) => {
   const prettyAddr = `${address.slice(0,charsToShow)}...${address.slice(addrLastIdx-charsToShow, addrLastIdx)}`
 
   switch (currency) {
-    case CURRENCY_TYPES.ETH:
+    case CURRENCIES.Ethereum.name:
       opts.title = 'Ethereum address copied'
       opts.body = `Click here if you are starting a transation to:\n${prettyAddr}`
       notification = new Notification(opts)

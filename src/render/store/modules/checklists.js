@@ -1,7 +1,7 @@
 import _ from 'lodash'
-import CHECKLISTS from '../../constants/checklists'
-import { DEFAULT_CURRENCY } from '../../constants/currency'
-import { SET_CHECKLIST, SET_CHECKLIST_ITEM_STATE } from '../../constants/mutation-types'
+import { DEFAULT_CURRENCY } from '../../../constants/currency'
+import CHECKLISTS from '../../../constants/vue/checklists'
+import { SET_CHECKLIST, SET_CHECKLIST_ITEM_STATE } from '../../../constants/vue/mutation-types'
 
 // Initial state
 const state = {

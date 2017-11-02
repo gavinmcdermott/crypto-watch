@@ -3,7 +3,7 @@ import { app, BrowserWindow, clipboard, ipcMain } from 'electron'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import { enableLiveReload } from 'electron-compile'
 import { log, logError } from '../common/debug'
-import { EVENT_TYPES } from './constants/events'
+import { EVENT_TYPES } from '../constants/events'
 import keyboard from './keyboard'
 
 const IS_DEV_MODE = process.execPath.match(/[\\/]electron/)
@@ -102,9 +102,26 @@ app.on('before-quit', () => willQuitApp = true)
 // ABSRTACT OUT EVENTS
 ipcMain.on(EVENT_TYPES.NOTIFICATION_CLICKED, (opts) => {
   mainWindow.show()
-  mainWindow.webContents.send('NEW_CRYPTO', opts)
+  mainWindow.webContents.send(EVENT_TYPES.NOTIFICATION_CLICKED, opts)
 })
 
 ipcMain.on(EVENT_TYPES.CLIPBOARD_CHANGED, (opts) => {
-  mainWindow.webContents.send('CHANGED', opts)
+  mainWindow.webContents.send(EVENT_TYPES.CLIPBOARD_CHANGED, opts)
 })
+
+
+
+ipcMain.on(EVENT_TYPES.KEYBOARD_LOCK, (opts) => {
+  keyboard.lock()
+})
+
+ipcMain.on(EVENT_TYPES.KEYBOARD_UNLOCK, (opts) => {
+  keyboard.unlock()
+})
+
+
+
+
+
+
+

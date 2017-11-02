@@ -1,4 +1,4 @@
-import { ETHEREUM } from '../currency'
+import { ETHEREUM } from '../../currency'
 import ITEM_STATES from './item-states'
 
 const DEFAULT_STATE = ITEM_STATES.INITIAL

@@ -73,20 +73,22 @@ export const lockKeys = () => {
 
       if (!shouldLockCommand(commandString)) {
         let locked = globalShortcut.register(commandString, () => {
-          log(`Keypress prevented (${commandString}) at ${new Date().getTime()}`)
+          log(`Keypress prevented (${commandString}) at UTC:${new Date().getTime()}`)
         })
         if (locked) {
-          log(`Keyboard locking ${commandString}`)
+          // log(`Keyboard locking ${commandString}`)
         } else {
           logError(`Keyboard failed to lock ${commandString}`)
         }
       } else {
-        log(`Keyboard leaving ${commandString} active`)
+        // log(`Keyboard leaving ${commandString} active`)
       }
     }
   })
+  log(`keyboard locked`)
 }
 
 export const unlockKeys = () => {
   globalShortcut.unregisterAll()
+  log(`keyboard unlocked`)
 }
