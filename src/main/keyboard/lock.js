@@ -2,9 +2,16 @@ import robot from 'robotjs'
 import { globalShortcut } from 'electron'
 import { log, logError } from '../../common/debug'
 
+// NEED TO FIGURE OUT THE BUG HERE...
+// NEED TO FIGURE OUT THE BUG HERE...
+// NEED TO FIGURE OUT THE BUG HERE...
+console.log(globalShortcut)
+// NEED TO FIGURE OUT THE BUG HERE...
+// NEED TO FIGURE OUT THE BUG HERE...
+// NEED TO FIGURE OUT THE BUG HERE...
+
 const EMPTY_STR = ''
 
-// All keys
 const LETTERS = [
   'Q','W','E','R','T','Y','U','I','O','P','A','S','D',
   'F','G','H','J','K','L','Z','X','C','V','B','N','M',
@@ -15,12 +22,15 @@ const FUNCS = [
   'F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12','F13','F14',
   'F15','F16','F17','F18','F19','F20','F21','F22','F23','F24',
 ]
-const NAMED_KEYS = ['Plus','Space','Tab','Backspace','Delete','Insert','Return']
+const NAMED_KEYS = [
+  'Plus','Space','Tab','Backspace','Delete','Insert','Return',
+  'Esc','PageUp','PageDown','Up','Down','Left','Right',
+]
+
 const KEYS_TO_BE_LOCKED = LETTERS.concat(NUMBERS, PUNCTUATIONS, FUNCS, NAMED_KEYS)
 
-// Key modifiers (needed to register in addition to keys)
 const KEY_MODIFIERS = [
-  EMPTY_STR, // needed in order to register all individual keys too
+  EMPTY_STR, // register an empty string to register individual keys themselves
   'Alt+',
   'Shift+',
   'CmdOrCtrl+',
@@ -28,17 +38,22 @@ const KEY_MODIFIERS = [
   'Shift+CmdOrCtrl+',
 ]
 
-// Do not lock these key commands when protecting the user
-const ACTIVE_COMMANDS_WHEN_LOCKED = [
+// Do not lock these key commands when locking the keyboard
+const KEYS_TO_LEAVE_ACTIVE = [
   'CmdOrCtrl+Q',    // quitting the app
   'CmdOrCtrl+Tab',  // switching between apps
-  // 'CmdOrCtrl+C',    // copy
-  // 'CmdOrCtrl+V',    // paste
+  'Esc',
+  'PageUp',
+  'PageDown',
+  'Up',
+  'Down',
+  'Left',
+  'Right',
 ]
 
 const shouldLockCommand = (keyCommand) => {
   let leaveActive = false
-  ACTIVE_COMMANDS_WHEN_LOCKED.forEach((cmd) => {
+  KEYS_TO_LEAVE_ACTIVE.forEach((cmd) => {
     if (cmd === keyCommand) leaveActive = true
   })
   return leaveActive

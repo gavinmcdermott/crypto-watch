@@ -16,6 +16,7 @@
     mounted () {
       // TODO: make sure we don't double register this handler!
       ipcRenderer.on('test', (event, data) => {
+        console.log('RECEIVED IN CLIENT', data)
         this.$store.commit(SET_CLIPBOARD, data)
       })
     },
