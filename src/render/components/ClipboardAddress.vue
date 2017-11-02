@@ -15,9 +15,14 @@
     name: 'clipboard-address',
     mounted () {
       // TODO: make sure we don't double register this handler!
-      ipcRenderer.on('test', (event, data) => {
-        console.log('RECEIVED IN CLIENT', data)
-        this.$store.commit(SET_CLIPBOARD, data)
+      ipcRenderer.on('CHANGED', (event, data) => {
+        console.log('CHANGED', data)
+        // this.$store.commit(SET_CLIPBOARD, data)
+      })
+
+      ipcRenderer.on('NEW_CRYPTO', (event, data) => {
+        console.log('NEW_CRYPTO', data)
+        // this.$store.commit(SET_CLIPBOARD, data)
       })
     },
     computed: {

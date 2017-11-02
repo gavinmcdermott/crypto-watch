@@ -18,34 +18,6 @@ let mainWindow
 // Some description
 let willQuitApp = false
 
-// Pending notification functions for the main window if the main process needs
-// to communicate with the window before the window exists
-const mainWindowNotifyFuncs = new Set()
-
-// Iterates through and calls pending main windown notification funcs
-const sendMainWindowNotifications = () => {
-  for (let notifyFn of mainWindowNotifyFuncs) {
-    notifyFn()
-    mainWindowNotifyFuncs.delete(notifyFn)
-  }
-}
-
-// Main Window visibility utilities
-const appIsOpenAndNotFocused = () => {
-  return mainWindow && mainWindow.isVisible() && !mainWindow.isFocused()
-}
-
-// window is minimized down into the dock on a mac (not closed though)
-const appIsMinimized = () => mainWindow && mainWindow.isMinimized()
-
-const appHasWindow = () => appIsOpenAndNotFocused() || appIsMinimized()
-
-// window is closed, but main process (the app) is still running
-const appNeedsWindow = () => {
-  // return mainWindow && !mainWindow.isVisible() && !mainWindow.isMinimized()
-  return !mainWindow
-}
-
 // Main Window creation
 const createWindow = async () => {
   // Create the browser window
@@ -67,11 +39,6 @@ const createWindow = async () => {
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
     log('app window created')
-  })
-
-  mainWindow.on('show', () => {
-    sendMainWindowNotifications()
-    log('app window shown')
   })
 
   // fires before 'closed' event,
@@ -112,10 +79,13 @@ app.on('quit', () => {
 // 'activate' is emitted when the user clicks the Dock icon (OS X)
 app.on('activate', () => {
   log('app activating')
+  const appNeedsWindow = mainWindow
+    && !mainWindow.isVisible()
+    && !mainWindow.isMinimized()
 
   // OS X: re-create a window in the app when the dock icon is clicked
   // and the window is not open
-  if (appNeedsWindow()) {
+  if (appNeedsWindow) {
     createWindow()
   } else {
     log('app window already created and active')
@@ -127,15 +97,14 @@ app.on('activate', () => {
 app.on('before-quit', () => willQuitApp = true)
 
 
+
+
 // ABSRTACT OUT EVENTS
 ipcMain.on(EVENT_TYPES.NOTIFICATION_CLICKED, (opts) => {
-  if (opts.notifyMainWindow) {
-    const notifyFunc = () => mainWindow.webContents.send('test', opts)
-    mainWindowNotifyFuncs.add(notifyFunc)
-  }
-
-  if (appNeedsWindow()) return createWindow()
-
   mainWindow.show()
-  sendMainWindowNotifications()
+  mainWindow.webContents.send('NEW_CRYPTO', opts)
+})
+
+ipcMain.on(EVENT_TYPES.CLIPBOARD_CHANGED, (opts) => {
+  mainWindow.webContents.send('CHANGED', opts)
 })

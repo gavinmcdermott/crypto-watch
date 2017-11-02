@@ -1,8 +1,9 @@
-import { clipboard } from 'electron'
+import { clipboard, ipcMain } from 'electron'
 import { log, logError } from '../../common/debug'
 import { ethereum } from '../../common/crypto'
 import { notifyUser } from '../notifier'
 import { CURRENCY_TYPES } from '../constants/currency'
+import { EVENT_TYPES } from '../constants/events'
 
 const WATCH_INTERVAL_MILLI = 111
 
@@ -34,7 +35,14 @@ export const startCopyWatch = () => {
                                   newClipboardValue !== oldClipboardValue
 
     if (newValueIsOfInterest) {
+      // Always let the main process know that the value changed
+      ipcMain.emit(EVENT_TYPES.CLIPBOARD_CHANGED, {
+        newValue: newClipboardValue,
+        oldValue: oldClipboardValue,
+      })
+      // Then determine if we need to notify the user
       handleNewClipboardValue(newClipboardValue, oldClipboardValue)
+      // update local values
       oldClipboardValue = newClipboardValue
     }
   }, WATCH_INTERVAL_MILLI)

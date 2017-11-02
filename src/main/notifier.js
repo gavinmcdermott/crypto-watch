@@ -7,7 +7,6 @@ const notifyProcess = ({ currency, address }) => {
   const opts = {
     currency,
     address,
-    notifyMainWindow: true,
   }
   ipcMain.emit(EVENT_TYPES.NOTIFICATION_CLICKED, opts)
 }
@@ -16,7 +15,7 @@ export const notifyUser = ({ currency, address }) => {
   let opts = {}
   let notification = null
 
-  const charsToShow = 12
+  const charsToShow = 13
   const addrLastIdx = address.length - 1
   const prettyAddr = `${address.slice(0,charsToShow)}...${address.slice(addrLastIdx-charsToShow, addrLastIdx)}`
 
