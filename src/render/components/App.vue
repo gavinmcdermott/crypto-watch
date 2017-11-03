@@ -2,27 +2,20 @@
   <div>
     <h2>Hello from {{text}}</h2>
     <clipboard-address></clipboard-address>
-    <div v-for="(item, index) in checklist.items">
-      <currency-tile
-        :index="index"
-        :title="item.title"
-        :state="item.state"
-        :states="item.states">
-      </currency-tile>
-    </div>
+    <checklist></checklist>
     <hr>
   </div>
 </template>
 
 <script>
   import ClipboardAddress from './ClipboardAddress'
-  import CurrencyTile from './CurrencyTile'
+  import Checklist from './Checklist'
 
   export default {
     name: 'App',
     components: {
       ClipboardAddress,
-      CurrencyTile,
+      Checklist,
     },
     data () {
       return {

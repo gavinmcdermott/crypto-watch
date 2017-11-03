@@ -7,10 +7,8 @@ export default (mainWindow=null, createWindow=null) => {
   // handle init error
 
   const sendToWindow = (eventType, opts) => {
-    return () => {
-      if (!mainWindow) return
-      mainWindow.webContents.send(eventType, opts)
-    }
+    if (!mainWindow) return
+    mainWindow.webContents.send(eventType, opts)
   }
 
   const showWindow = () => {
@@ -20,10 +18,22 @@ export default (mainWindow=null, createWindow=null) => {
 
   // Keyboard lock / unlock
   ipcMain.on(EVENT_TYPES.LOCK_KEYBOARD, keyboard.lock)
-  ipcMain.on(EVENT_TYPES.KEYBOARD_LOCKED, sendToWindow(EVENT_TYPES.KEYBOARD_LOCKED))
+  ipcMain.on(EVENT_TYPES.KEYBOARD_LOCKED, () => {
+    sendToWindow(EVENT_TYPES.KEYBOARD_LOCKED)
+  })
 
   ipcMain.on(EVENT_TYPES.UNLOCK_KEYBOARD, keyboard.unlock)
-  ipcMain.on(EVENT_TYPES.KEYBOARD_UNLOCKED, sendToWindow(EVENT_TYPES.KEYBOARD_UNLOCKED))
+  ipcMain.on(EVENT_TYPES.KEYBOARD_UNLOCKED, () => {
+    sendToWindow(EVENT_TYPES.KEYBOARD_UNLOCKED)
+  })
+
+  // Copying
+  ipcMain.on(EVENT_TYPES.CLIPBOARD_CHANGED, (opts) => {
+    sendToWindow(EVENT_TYPES.CLIPBOARD_CHANGED, opts)
+  })
+  ipcMain.on(EVENT_TYPES.VALID_ADDRESS_COPIED, (opts) => {
+    sendToWindow(EVENT_TYPES.VALID_ADDRESS_COPIED, opts)
+  })
 
   // Notifications
   ipcMain.on(EVENT_TYPES.NOTIFICATION_CLICKED, showWindow)

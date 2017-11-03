@@ -10,20 +10,25 @@ const WATCH_INTERVAL_MILLI = 111
 let clipboardWatcher = null
 let oldClipboardValue = null
 
-const handleNewClipboardValue = (newValue, oldValue) => {
+const checkIfValueIsCryptoAddr = (newValue, oldValue) => {
   const validCryptoAddr = ethereum.isAddress(newValue) // will be extended beyond ETH
   const validEthAddr = ethereum.isAddress(newValue)
 
   // Do nothing if the new value isn't a valid crypto address
   if (!validCryptoAddr) return
 
+  let opts = {
+    address: newValue,
+    currency: null
+  }
+
   if (validEthAddr) {
     log(`${CURRENCIES.Ethereum.name} address copied: ${newValue}`)
-    notifyUser({
-      currency: CURRENCIES.Ethereum.name,
-      address: newValue,
-    })
+    opts.currency = CURRENCIES.Ethereum.name
+    notifyUser(opts)
   }
+
+  ipcMain.emit(EVENT_TYPES.VALID_ADDRESS_COPIED, opts)
 }
 
 export const startCopyWatch = () => {
@@ -31,17 +36,17 @@ export const startCopyWatch = () => {
 
   clipboardWatcher = setInterval(() => {
     const newClipboardValue = clipboard.readText()
-    const newValueIsOfInterest = newClipboardValue &&
-                                  newClipboardValue !== oldClipboardValue
+    const isOfInterest = newClipboardValue &&
+                          newClipboardValue !== oldClipboardValue
 
-    if (newValueIsOfInterest) {
+    if (isOfInterest) {
       // Always let the main process know that the value changed
       ipcMain.emit(EVENT_TYPES.CLIPBOARD_CHANGED, {
         newValue: newClipboardValue,
         oldValue: oldClipboardValue,
       })
       // Then determine if we need to notify the user
-      handleNewClipboardValue(newClipboardValue, oldClipboardValue)
+      checkIfValueIsCryptoAddr(newClipboardValue, oldClipboardValue)
       // update local values
       oldClipboardValue = newClipboardValue
     }

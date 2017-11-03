@@ -4,22 +4,22 @@ import { SET_CLIPBOARD } from '../../../constants/vue/mutation-types'
 // Initial state
 const state = {
   clipboard: {
-    currentValue: null,
-    previousValue: null,
+    newValue: null,
+    oldValue: null,
   }
 }
 
 // Getters
 const getters = {
-  clipboardVal: state => state.clipboard.currentValue,
-  clipboardPrevVal: state => state.clipboard.previousValue,
+  clipboardNewValue: state => state.clipboard.newValue,
+  clipboardOldValue: state => state.clipboard.oldValue,
 }
 
 // Mutations
 const mutations = {
-  [SET_CLIPBOARD] (state, { current, previous }) {
-    state.clipboard.previousValue = state.clipboard.currentValue
-    state.clipboard.currentValue = current
+  [SET_CLIPBOARD] (state, { newValue, oldValue }) {
+    state.clipboard.oldValue = oldValue
+    state.clipboard.newValue = newValue
   }
 }
 

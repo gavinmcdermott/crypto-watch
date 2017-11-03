@@ -1,7 +1,7 @@
 <template>
   <div>
-    <p>Current clipboard: {{current}}</p>
-    <p>Previous clipboard: {{previous}}</p>
+    <p>Current clipboard: {{newValue}}</p>
+    <p>Previous clipboard: {{oldValue}}</p>
     <button v-on:click="lock">Lock</button>
     <button v-on:click="unlock">Unlock</button>
   </div>
@@ -17,16 +17,12 @@
   export default {
     name: 'clipboard-address',
     mounted () {
-      // TODO: make sure we don't double register this handler!
-      ipcRenderer.on(EVENT_TYPES.KEYBOARD_LOCKED, (event, data) => {
-        console.log('KEYBOARD_LOCKED', data)
-        // this.$store.commit(SET_CLIPBOARD, data)
+
+      ipcRenderer.on(EVENT_TYPES.CLIPBOARD_CHANGED, (event, data) => {
+        console.log('CLIPBOARD_CHANGED', data)
+        this.$store.commit(SET_CLIPBOARD, data)
       })
 
-      ipcRenderer.on(EVENT_TYPES.KEYBOARD_UNLOCKED, (event, data) => {
-        console.log('KEYBOARD_UNLOCKED', data)
-        // this.$store.commit(SET_CLIPBOARD, data)
-      })
     },
     methods: {
       lock () {
@@ -37,11 +33,11 @@
       },
     },
     computed: {
-      current () {
-        return this.$store.getters.clipboardVal
+      newValue () {
+        return this.$store.getters.clipboardNewValue
       },
-      previous () {
-        return this.$store.getters.clipboardPrevVal
+      oldValue () {
+        return this.$store.getters.clipboardOldValue
       }
     }
   }

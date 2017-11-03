@@ -3,20 +3,20 @@ import ITEM_STATES from './item-states'
 
 const DEFAULT_STATE = ITEM_STATES.INITIAL
 
-const CHECKLIST_ITEMS = {
+export const ETHEREUM_CHECKLIST_TYPES = {
   ADDR_COPIED: 'ADDR_COPIED',
   ADDR_VERIFIED: 'ADDR_VERIFIED',
   TX_INFO_ENTERED: 'TX_INFO_ENTERED',
-  ADD_PASTED: 'ADD_PASTED',
+  ADDR_PASTED: 'ADDR_PASTED',
 }
 
-export default {
+export const ETHEREUM_CHECKLIST = {
   name: ETHEREUM.name,
   items: [
     {
-      title: CHECKLIST_ITEMS.ADDR_COPIED,
+      type: ETHEREUM_CHECKLIST_TYPES.ADDR_COPIED,
       state: DEFAULT_STATE,
-      states: {
+      stateData: {
         [ITEM_STATES.INITIAL]: {
           title: 'INITIAL title text',
           icon: '//some_path_to_icon'
@@ -29,16 +29,16 @@ export default {
           title: 'ERROR title text',
           icon: '//some_path_to_icon'
         },
-        [ITEM_STATES.DETAIL]: {
-          title: 'DETAIL title text',
+        [ITEM_STATES.INFO]: {
+          title: 'INFO title text',
           icon: '//some_path_to_icon'
         },
       },
     },
     {
-      title: CHECKLIST_ITEMS.ADDR_VERIFIED,
+      type: ETHEREUM_CHECKLIST_TYPES.ADDR_VERIFIED,
       state: DEFAULT_STATE,
-      states: {
+      stateData: {
         [ITEM_STATES.INITIAL]: {
           title: 'INITIAL title text here too',
           icon: '//some_path_to_icon'
@@ -51,16 +51,16 @@ export default {
           title: 'ERROR title text',
           icon: '//some_path_to_icon'
         },
-        [ITEM_STATES.DETAIL]: {
-          title: 'DETAIL title text',
+        [ITEM_STATES.INFO]: {
+          title: 'INFO title text',
           icon: '//some_path_to_icon'
         },
       }
     },
     {
-      title: CHECKLIST_ITEMS.TX_INFO_ENTERED,
+      type: ETHEREUM_CHECKLIST_TYPES.TX_INFO_ENTERED,
       state: DEFAULT_STATE,
-      states: {
+      stateData: {
         [ITEM_STATES.INITIAL]: {
           title: 'INITIAL title text',
           icon: '//some_path_to_icon'
@@ -73,16 +73,16 @@ export default {
           title: 'ERROR title text',
           icon: '//some_path_to_icon'
         },
-        [ITEM_STATES.DETAIL]: {
-          title: 'DETAIL title text',
+        [ITEM_STATES.INFO]: {
+          title: 'INFO title text',
           icon: '//some_path_to_icon'
         },
       }
     },
     {
-      title: CHECKLIST_ITEMS.ADD_PASTED,
+      type: ETHEREUM_CHECKLIST_TYPES.ADDR_PASTED,
       state: DEFAULT_STATE,
-      states: {
+      stateData: {
         [ITEM_STATES.INITIAL]: {
           title: 'INITIAL title text',
           icon: '//some_path_to_icon'
@@ -95,8 +95,8 @@ export default {
           title: 'ERROR title text',
           icon: '//some_path_to_icon'
         },
-        [ITEM_STATES.DETAIL]: {
-          title: 'DETAIL title text',
+        [ITEM_STATES.INFO]: {
+          title: 'INFO title text',
           icon: '//some_path_to_icon'
         },
       },

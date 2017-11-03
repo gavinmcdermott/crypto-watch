@@ -18,9 +18,9 @@ const mutations = {
   [SET_CHECKLIST] (state, { name }) {
     state.checklist = CHECKLISTS[name]
   },
-  [SET_CHECKLIST_ITEM_STATE] (state, { title, newState }) {
-    const stepToUpdate = _.first(state.checklist.items.filter((item) => item.title === title))
-    stepToUpdate.state = newState
+  [SET_CHECKLIST_ITEM_STATE] (state, { type, newState }) {
+    const itemToUpdate = _.first(state.checklist.items.filter((item) => item.type === type))
+    itemToUpdate.state = newState
   }
 }
 
