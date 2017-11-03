@@ -1,10 +1,11 @@
 import path from 'path'
-import { app, BrowserWindow, clipboard, ipcMain } from 'electron'
+import { app, BrowserWindow, clipboard, ipcMain, webContents } from 'electron'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import { enableLiveReload } from 'electron-compile'
 import { log, logError } from '../common/debug'
 import { EVENT_TYPES } from '../constants/events'
 import keyboard from './keyboard'
+import initEventListeners from './events'
 
 const IS_DEV_MODE = process.execPath.match(/[\\/]electron/)
 const INDEX_HTML_PATH = `file://${path.resolve(__dirname, '../index.html')}`
@@ -13,7 +14,7 @@ if (IS_DEV_MODE) enableLiveReload()
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+let mainWindow = null
 
 // Some description
 let willQuitApp = false
@@ -38,6 +39,7 @@ const createWindow = async () => {
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
+    initEventListeners(mainWindow, createWindow)
     log('app window created')
   })
 
@@ -68,12 +70,6 @@ app.on('ready', () => {
   log('app started')
 })
 
-app.on('quit', () => {
-  keyboard.unlock()
-  keyboard.copy.stopWatch()
-  log('app quit')
-})
-
 // TODO: log close and minimize events from the window!
 
 // 'activate' is emitted when the user clicks the Dock icon (OS X)
@@ -87,41 +83,17 @@ app.on('activate', () => {
   // and the window is not open
   if (appNeedsWindow) {
     createWindow()
-  } else {
-    log('app window already created and active')
   }
 })
 
 // 'before-quit' is emitted when Electron receives the signal to exit and wants
 // to start closing windows
-app.on('before-quit', () => willQuitApp = true)
-
-
-
-
-// ABSRTACT OUT EVENTS
-ipcMain.on(EVENT_TYPES.NOTIFICATION_CLICKED, (opts) => {
-  mainWindow.show()
-  mainWindow.webContents.send(EVENT_TYPES.NOTIFICATION_CLICKED, opts)
+app.on('before-quit', () => {
+  willQuitApp = true
 })
 
-ipcMain.on(EVENT_TYPES.CLIPBOARD_CHANGED, (opts) => {
-  mainWindow.webContents.send(EVENT_TYPES.CLIPBOARD_CHANGED, opts)
-})
-
-
-
-ipcMain.on(EVENT_TYPES.KEYBOARD_LOCK, (opts) => {
-  keyboard.lock()
-})
-
-ipcMain.on(EVENT_TYPES.KEYBOARD_UNLOCK, (opts) => {
+app.on('quit', () => {
   keyboard.unlock()
+  keyboard.copy.stopWatch()
+  log('app quit')
 })
-
-
-
-
-
-
-

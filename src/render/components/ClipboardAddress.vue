@@ -18,22 +18,22 @@
     name: 'clipboard-address',
     mounted () {
       // TODO: make sure we don't double register this handler!
-      ipcRenderer.on(EVENT_TYPES.NOTIFICATION_CLICKED, (event, data) => {
-        console.log('NOTIFICATION_CLICKED', data)
+      ipcRenderer.on(EVENT_TYPES.KEYBOARD_LOCKED, (event, data) => {
+        console.log('KEYBOARD_LOCKED', data)
         // this.$store.commit(SET_CLIPBOARD, data)
       })
 
-      ipcRenderer.on(EVENT_TYPES.CLIPBOARD_CHANGED, (event, data) => {
-        console.log('CLIPBOARD_CHANGED', data)
+      ipcRenderer.on(EVENT_TYPES.KEYBOARD_UNLOCKED, (event, data) => {
+        console.log('KEYBOARD_UNLOCKED', data)
         // this.$store.commit(SET_CLIPBOARD, data)
       })
     },
     methods: {
       lock () {
-        ipcRenderer.send(EVENT_TYPES.KEYBOARD_LOCK)
+        ipcRenderer.send(EVENT_TYPES.LOCK_KEYBOARD)
       },
       unlock () {
-        ipcRenderer.send(EVENT_TYPES.KEYBOARD_UNLOCK)
+        ipcRenderer.send(EVENT_TYPES.UNLOCK_KEYBOARD)
       },
     },
     computed: {

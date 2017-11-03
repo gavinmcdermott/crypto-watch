@@ -1,6 +1,7 @@
 import robot from 'robotjs'
-import { globalShortcut } from 'electron'
+import { globalShortcut, ipcMain } from 'electron'
 import { log, logError } from '../../common/debug'
+import { EVENT_TYPES } from '../../constants/events'
 
 // NEED TO FIGURE OUT THE BUG HERE...
 // NEED TO FIGURE OUT THE BUG HERE...
@@ -75,20 +76,16 @@ export const lockKeys = () => {
         let locked = globalShortcut.register(commandString, () => {
           log(`Keypress prevented (${commandString}) at UTC:${new Date().getTime()}`)
         })
-        if (locked) {
-          // log(`Keyboard locking ${commandString}`)
-        } else {
-          logError(`Keyboard failed to lock ${commandString}`)
-        }
-      } else {
-        // log(`Keyboard leaving ${commandString} active`)
+        if (!locked) logError(`Keyboard failed to lock ${commandString}`)
       }
     }
   })
+  ipcMain.emit(EVENT_TYPES.KEYBOARD_LOCKED)
   log(`keyboard locked`)
 }
 
 export const unlockKeys = () => {
   globalShortcut.unregisterAll()
+  ipcMain.emit(EVENT_TYPES.KEYBOARD_UNLOCKED)
   log(`keyboard unlocked`)
 }

@@ -8,6 +8,7 @@ const notifyProcess = ({ currency, address }) => {
     currency,
     address,
   }
+  log('notification clicked by user')
   ipcMain.emit(EVENT_TYPES.NOTIFICATION_CLICKED, opts)
 }
 
