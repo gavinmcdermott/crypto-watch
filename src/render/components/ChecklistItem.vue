@@ -31,7 +31,7 @@
   import { mapGetters } from 'vuex'
   import { log, logError } from '../../common/debug'
   import { MUTATION_TYPES } from '../../constants/vue/mutations'
-  import ITEM_STATES from '../../constants/vue/checklists/item-states'
+  import { ITEM_STATES } from '../../constants/vue/checklists/items'
 
   export default {
     name: 'currency-tile',

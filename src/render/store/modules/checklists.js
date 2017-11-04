@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { DEFAULT_CURRENCY } from '../../../constants/currency'
+import { DEFAULT_CURRENCY } from '../../../constants/currencies'
 import CHECKLISTS from '../../../constants/vue/checklists'
 import { SET_CHECKLIST, SET_CHECKLIST_ITEM_STATE } from '../../../constants/vue/mutations'
 

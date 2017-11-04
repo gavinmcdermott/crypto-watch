@@ -1,7 +1,7 @@
 import { clipboard, ipcMain } from 'electron'
 import { log, logError } from '../../common/debug'
 import { ethereum } from '../../common/crypto'
-import { CURRENCIES } from '../../constants/currency'
+import { CURRENCIES } from '../../constants/currencies'
 import { EVENT_TYPES } from '../../constants/events'
 import { notifyUser } from '../notifier'
 
@@ -23,15 +23,14 @@ const checkIfValueIsCryptoAddr = (newValue, oldValue) => {
   }
 
   if (validEthAddr) {
-    log(`${CURRENCIES.Ethereum.name} address copied: ${newValue}`)
     opts.currency = CURRENCIES.Ethereum.name
     notifyUser(opts)
+    log(`${opts.currency} address copied: ${newValue}`)
   }
-
-  ipcMain.emit(EVENT_TYPES.VALID_ADDRESS_COPIED, opts)
 }
 
 export const startCopyWatch = () => {
+  ipcMain.emit(EVENT_TYPES.COPY_WATCH_STARTED)
   log('copy watch started')
 
   clipboardWatcher = setInterval(() => {
@@ -54,8 +53,9 @@ export const startCopyWatch = () => {
 }
 
 export const stopCopyWatch = () => {
-  log('copy watch stopped')
   clearInterval(clipboardWatcher)
   clipboardWatcher = null
   clipboard.clear()
+  ipcMain.emit(EVENT_TYPES.COPY_WATCH_STOPPED)
+  log('copy watch stopped')
 }

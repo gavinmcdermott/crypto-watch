@@ -1,5 +1,5 @@
-import { ETHEREUM } from '../../currency'
-import ITEM_STATES from './item-states'
+import { ETHEREUM } from '../../currencies'
+import { ITEM_STATES } from './items'
 
 const DEFAULT_STATE = ITEM_STATES.INITIAL
 

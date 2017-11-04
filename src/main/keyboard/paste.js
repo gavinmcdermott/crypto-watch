@@ -12,7 +12,7 @@ const PASTE_COMMAND = 'CmdOrCtrl+V'
 
 // TODO: Security checks here!
 // Store and pull things from db/memory, etc... or, how to handle malicious pasters
-export const registerPasteHandler = () => {
+export const startPasteWatch = () => {
   log(`paste handler registered: ${PASTE_COMMAND}`)
 
   let registered = globalShortcut.register(PASTE_COMMAND, () => {
@@ -23,7 +23,7 @@ export const registerPasteHandler = () => {
 
     // Immediately deregister the paste handler so we don't trigger
     // an infinite loop when we use robotjs to paste
-    deregisterPasteHandler()
+    stopPasteWatch()
 
     // Need a short timeout here to make sure we capture the paste
     // TODO: PLAY WITH THIS INTERVAL AND UI FEEDBACK
@@ -36,10 +36,16 @@ export const registerPasteHandler = () => {
     }, 500)
   })
 
-  if (registered) ipcMain.emit(EVENT_TYPES.PASTE_WATCH_STARTED)
+  if (!registered) {
+    logError(`Unable to register ${PASTE_COMMAND}`)
+    // TODO: HOW DO WE WANT TO HANDLE THIS?
+    // ONE IDEA: NOTIFY THE RENDER PROCESS....
+  }
+
+  ipcMain.emit(EVENT_TYPES.PASTE_WATCH_STARTED)
 }
 
-export const deregisterPasteHandler = () => {
+export const stopPasteWatch = () => {
   globalShortcut.unregister(PASTE_COMMAND)
   ipcMain.emit(EVENT_TYPES.PASTE_WATCH_STOPPED)
   log(`paste handler deregistered: ${PASTE_COMMAND}`)

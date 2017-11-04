@@ -1,4 +1,4 @@
-import { ETHEREUM } from '../../currency'
+import { ETHEREUM } from '../../currencies'
 import { ETHEREUM_CHECKLIST } from './ethereum'
 
 export default {

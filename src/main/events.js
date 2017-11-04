@@ -1,4 +1,4 @@
-import { webContents, ipcMain } from 'electron'
+import { webContents, clipboard, ipcMain } from 'electron'
 import keyboard from './keyboard'
 import { log, logError } from '../common/debug'
 import { EVENT_TYPES } from '../constants/events'
@@ -16,6 +16,12 @@ export default (mainWindow=null, createWindow=null) => {
     createWindow()
   }
 
+  // Notify
+  ipcMain.on(EVENT_TYPES.NOTIFICATION_CLICKED, () => {
+    sendToWindow(EVENT_TYPES.NOTIFICATION_CLICKED, opts)
+    showWindow()
+  })
+
   // Lock keyboard
   ipcMain.on(EVENT_TYPES.LOCK_KEYBOARD, keyboard.lock)
   ipcMain.on(EVENT_TYPES.KEYBOARD_LOCKED, () => {
@@ -28,25 +34,30 @@ export default (mainWindow=null, createWindow=null) => {
     sendToWindow(EVENT_TYPES.KEYBOARD_UNLOCKED)
   })
 
+  // Copy watchers
+  ipcMain.on(EVENT_TYPES.START_COPY_WATCH, keyboard.copy.startWatch)
+  ipcMain.on(EVENT_TYPES.COPY_WATCH_STARTED, () => {
+    sendToWindow(EVENT_TYPES.COPY_WATCH_STARTED)
+  })
+
+  ipcMain.on(EVENT_TYPES.STOP_COPY_WATCH, keyboard.copy.stopWatch)
+  ipcMain.on(EVENT_TYPES.COPY_WATCH_STOPPED, () => {
+    sendToWindow(EVENT_TYPES.COPY_WATCH_STOPPED)
+  })
+
   // Copy values
   ipcMain.on(EVENT_TYPES.CLIPBOARD_CHANGED, (opts) => {
     sendToWindow(EVENT_TYPES.CLIPBOARD_CHANGED, opts)
   })
-  ipcMain.on(EVENT_TYPES.VALID_ADDRESS_COPIED, (opts) => {
-    sendToWindow(EVENT_TYPES.VALID_ADDRESS_COPIED, opts)
-  })
+  ipcMain.on(EVENT_TYPES.CLEAR_CLIPBOARD, clipboard.clear)
 
   // Paste watchers
-  ipcMain.on(EVENT_TYPES.START_PASTE_WATCH, () => {
-    keyboard.paste.registerHandler()
-  })
+  ipcMain.on(EVENT_TYPES.START_PASTE_WATCH, keyboard.paste.startWatch)
   ipcMain.on(EVENT_TYPES.PASTE_WATCH_STARTED, () => {
     sendToWindow(EVENT_TYPES.PASTE_WATCH_STARTED)
   })
 
-  ipcMain.on(EVENT_TYPES.STOP_PASTE_WATCH, () => {
-    keyboard.paste.deregisterHandler()
-  })
+  ipcMain.on(EVENT_TYPES.STOP_PASTE_WATCH, keyboard.paste.stopWatch)
   ipcMain.on(EVENT_TYPES.PASTE_WATCH_STOPPED, () => {
     sendToWindow(EVENT_TYPES.PASTE_WATCH_STOPPED)
   })
@@ -54,13 +65,9 @@ export default (mainWindow=null, createWindow=null) => {
   // Paste values
   ipcMain.on(EVENT_TYPES.PASTE_STARTED, (opts) => {
     sendToWindow(EVENT_TYPES.PASTE_STARTED, opts)
+    keyboard.lock()
   })
   ipcMain.on(EVENT_TYPES.PASTE_FINISHED, (opts) => {
     sendToWindow(EVENT_TYPES.PASTE_FINISHED, opts)
   })
-
-
-
-  // Notify
-  ipcMain.on(EVENT_TYPES.NOTIFICATION_CLICKED, showWindow)
 }

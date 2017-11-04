@@ -1,4 +1,4 @@
-import { CURRENCIES, DEFAULT_CURRENCY } from '../../../constants/currency'
+import { CURRENCIES, DEFAULT_CURRENCY } from '../../../constants/currencies'
 
 
 // Initial state

@@ -1,4 +1,4 @@
-export default {
+export const ITEM_STATES = {
   INITIAL: 'INITIAL',
   SUCCESS: 'SUCCESS',
   ERROR: 'ERROR',

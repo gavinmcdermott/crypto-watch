@@ -5,8 +5,8 @@
     <p>Test B: 0x90a963eea01820574914ce277c0f57f516b88e59</p>
     <hr>
     <p>Current clipboard: {{newValue}}</p>
-    <button v-on:click="startProtecting">Start a Transaction</button> or
-    <button v-on:click="stopProtecting">Stop a Transaction</button>
+    <button v-on:click="startTx">Start Tx</button> ||
+    <button v-on:click="stopTx">Stop Tx</button>
   </div>
 </template>
 
@@ -23,13 +23,15 @@
       })
     },
     methods: {
-      startProtecting () {
+      startTx () {
         this.$store.commit(MUTATION_TYPES.SET_PROTECTION_MODE, true)
         ipcRenderer.send(EVENT_TYPES.START_PASTE_WATCH)
       },
-      stopProtecting () {
+      stopTx () {
         this.$store.commit(MUTATION_TYPES.SET_PROTECTION_MODE, false)
         ipcRenderer.send(EVENT_TYPES.STOP_PASTE_WATCH)
+        ipcRenderer.send(EVENT_TYPES.CLEAR_CLIPBOARD)
+        ipcRenderer.send(EVENT_TYPES.UNLOCK_KEYBOARD)
       },
     },
     computed: {

@@ -1,7 +1,7 @@
 import { ipcMain, Notification } from 'electron'
 import { log, logError } from '../common/debug'
 import { EVENT_TYPES } from '../constants/events'
-import { CURRENCIES } from '../constants/currency'
+import { CURRENCIES } from '../constants/currencies'
 
 const notifyProcess = ({ currency, address }) => {
   const opts = {
@@ -13,30 +13,36 @@ const notifyProcess = ({ currency, address }) => {
 }
 
 export const notifyUser = ({ currency, address }) => {
-  let opts = {}
-  let notification = null
-
-  const charsToShow = 13
-  const addrLastIdx = address.length
-  const prettyAddr = `${address.slice(0,charsToShow)}...${address.slice(addrLastIdx-charsToShow, addrLastIdx)}`
-
-  switch (currency) {
-    case CURRENCIES.Ethereum.name:
-      opts.title = 'Ethereum address copied'
-      opts.body = `Click here to start a transation to\n${prettyAddr}`
-      notification = new Notification(opts)
-      break
-    default:
-      logError('HANDLE THIS ERROR CASE!!!')
-      break
+  let foo  ={
+    title: 123,
+    body: 'udsaniaskjndksa'
   }
+  let v = new Notification(foo)
+  v.show()
 
-  // TODO: What kind of error handling here?
-  if (!notification) {
-    logError(`WE ARE IN AN UNHANDLED COPY FAIL CASE `)
-    return
-  }
+  // let opts = {}
+  // let notification = null
 
-  notification.show()
-  notification.on('click', () => notifyProcess({ currency, address }))
+  // const charsToShow = 13
+  // const addrLastIdx = address.length
+  // const prettyAddr = `${address.slice(0,charsToShow)}...${address.slice(addrLastIdx-charsToShow, addrLastIdx)}`
+
+  // switch (currency) {
+  //   case CURRENCIES.Ethereum.name:
+  //     opts.title = 'Ethereum address copied'
+  //     opts.body = `Click here to start a transation to\n${prettyAddr}`
+  //     notification = new Notification(opts)
+  //     break
+  //   default:
+  //     logError(`Unhandled notification attempt: ${currency}`)
+  //     break
+  // }
+
+  // if (!notification) {
+  //   logError(`Notification failed: ${currency}`)
+  //   return
+  // }
+
+  // notification.show()
+  // notification.on('click', () => notifyProcess({ currency, address }))
 }

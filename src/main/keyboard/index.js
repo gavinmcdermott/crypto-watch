@@ -1,6 +1,6 @@
 import { startCopyWatch, stopCopyWatch } from './copy'
+import { startPasteWatch, stopPasteWatch } from './paste'
 import { lockKeys, unlockKeys } from './lock'
-import { registerPasteHandler, deregisterPasteHandler } from './paste'
 
 export default {
   copy: {
@@ -8,8 +8,8 @@ export default {
     stopWatch: stopCopyWatch,
   },
   paste: {
-    registerHandler: registerPasteHandler,
-    deregisterHandler: deregisterPasteHandler,
+    startWatch: startPasteWatch,
+    stopWatch: stopPasteWatch,
   },
   lock: lockKeys,
   unlock: unlockKeys,
