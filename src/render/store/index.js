@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import clipboard from './modules/clipboard'
 import checklists from './modules/checklists'
 import currency from './modules/currency'
+import protection from './modules/protection'
 
 Vue.use(Vuex)
 
@@ -13,6 +14,7 @@ export default new Vuex.Store({
     clipboard,
     currency,
     checklists,
+    protection,
   },
   strict: debug,
 })

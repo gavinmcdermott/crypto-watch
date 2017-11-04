@@ -1,5 +1,6 @@
 <template>
   <div>
+    <p>ProtectionMode is currently: {{protectionMode}}</p>
     <div v-for="(item, index) in checklist.items">
       <checklist-item
         :index="index"
@@ -38,6 +39,9 @@
       }
     },
     computed: {
+      protectionMode () {
+        return this.$store.getters.protectionMode
+      },
       checklist () {
         const checklist = this.$store.getters.checklist
 
@@ -50,8 +54,11 @@
               break
             case ETHEREUM_CHECKLIST_TYPES.ADDR_VERIFIED:
               item.validator = () => {
-                const isScam = this.scamAddressList.includes(this.$store.getters.clipboardNewValue)
-                return !isScam
+                const currentClipboard = this.$store.getters.clipboardNewValue
+                const isAddr = ethereum.isAddress(currentClipboard)
+
+                if (!isAddr) return false
+                return !this.scamAddressList.includes(currentClipboard)
               }
               break
             case ETHEREUM_CHECKLIST_TYPES.TX_INFO_ENTERED:

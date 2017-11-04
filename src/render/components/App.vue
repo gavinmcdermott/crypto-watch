@@ -1,32 +1,43 @@
 <template>
   <div>
-    <h2>Hello from {{text}}</h2>
-    <clipboard-address></clipboard-address>
+    <app-header></app-header>
     <checklist></checklist>
+    <!-- <footer></footer> -->
+
+    <!-- <button v-on:click="start">Start a Transaction</button> |
+    <button v-on:click="stop">Stop a Transaction</button> -->
     <hr>
   </div>
 </template>
 
 <script>
-  import ClipboardAddress from './ClipboardAddress'
+  import { ipcRenderer } from 'electron'
+  import AppHeader from './AppHeader'
+  // import Footer from './Footer'
   import Checklist from './Checklist'
+  import { EVENT_TYPES } from '../../constants/events'
 
   export default {
     name: 'App',
     components: {
-      ClipboardAddress,
+      AppHeader,
+      // Footer,
       Checklist,
     },
-    data () {
-      return {
-         text: 'CryptoWatch™'
-      }
-    },
-    computed: {
-      checklist () {
-        return this.$store.getters.checklist
-      },
-    }
+    // mounted () {
+    //   ipcRenderer.on(EVENT_TYPES.VALUE_PASTED, (event, data) => {
+    //     console.log('VALUE_PASTED', data)
+    //     // this.$store.commit(SET_CLIPBOARD, data)
+    //   })
+    // },
+    // methods: {
+    //   start () {
+    //     ipcRenderer.send(EVENT_TYPES.START_PASTE_WATCH)
+    //   },
+    //   stop () {
+    //     ipcRenderer.send(EVENT_TYPES.STOP_PASTE_WATCH)
+    //   },
+    // }
   }
 </script>
 

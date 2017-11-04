@@ -1,5 +1,5 @@
 import { CURRENCIES, DEFAULT_CURRENCY } from '../../../constants/currency'
-import { SET_CURRENCY } from '../../../constants/vue/mutation-types'
+
 
 // Initial state
 const state = {

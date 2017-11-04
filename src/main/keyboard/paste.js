@@ -15,8 +15,10 @@ const PASTE_COMMAND = 'CmdOrCtrl+V'
 export const registerPasteHandler = () => {
   log(`paste handler registered: ${PASTE_COMMAND}`)
 
-  globalShortcut.register(PASTE_COMMAND, () => {
+  let registered = globalShortcut.register(PASTE_COMMAND, () => {
     const value = clipboard.readText()
+    ipcMain.emit(EVENT_TYPES.PASTE_STARTED, { value })
+
     log(`paste captured ${value}`)
 
     // Immediately deregister the paste handler so we don't trigger
@@ -30,13 +32,15 @@ export const registerPasteHandler = () => {
       // Use robotjs to force a user paste action
       robot.keyTap('v', 'command')
       // Alert the app that something of interest was pasted
-      ipcMain.emit(EVENT_TYPES.VALUE_PASTED, { value })
+      ipcMain.emit(EVENT_TYPES.PASTE_FINISHED, { value })
     }, 500)
   })
 
+  if (registered) ipcMain.emit(EVENT_TYPES.PASTE_WATCH_STARTED)
 }
 
 export const deregisterPasteHandler = () => {
-  log(`paste handler deregistered: ${PASTE_COMMAND}`)
   globalShortcut.unregister(PASTE_COMMAND)
+  ipcMain.emit(EVENT_TYPES.PASTE_WATCH_STOPPED)
+  log(`paste handler deregistered: ${PASTE_COMMAND}`)
 }

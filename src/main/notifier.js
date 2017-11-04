@@ -17,13 +17,13 @@ export const notifyUser = ({ currency, address }) => {
   let notification = null
 
   const charsToShow = 13
-  const addrLastIdx = address.length - 1
+  const addrLastIdx = address.length
   const prettyAddr = `${address.slice(0,charsToShow)}...${address.slice(addrLastIdx-charsToShow, addrLastIdx)}`
 
   switch (currency) {
     case CURRENCIES.Ethereum.name:
       opts.title = 'Ethereum address copied'
-      opts.body = `Click here if you are starting a transation to:\n${prettyAddr}`
+      opts.body = `Click here to start a transation to\n${prettyAddr}`
       notification = new Notification(opts)
       break
     default:

@@ -1,27 +1,28 @@
 <template>
   <div>
     <h4>{{currency.name}} Transaction Tile</h4>
-    <p>Type: {{type}}</p>
-    <p>Is Valid: {{valid}}</p>
-    <p>Tile state: {{state}}</p>
 
-    <div v-if="state === STATE_TYPES.INITIAL">
-      Should be initial... {{state}}
+    <div v-show="protectionMode">
+      <p>Type: {{type}} | Valid: {{valid}} | State: {{state}}</p>
+
+      <div v-if="state === STATE_TYPES.INITIAL">
+        Should be initial... {{state}}
+      </div>
+
+      <div v-if="state === STATE_TYPES.SUCCESS">
+        Should be success... {{state}}
+      </div>
+
+      <div v-if="state === STATE_TYPES.ERROR">
+        Should be error... {{state}}
+      </div>
+
+      <div v-if="state === STATE_TYPES.INFO">
+        Should be info... {{state}}
+      </div>
+
+      <button v-on:click="update">Update</button>
     </div>
-
-    <div v-if="state === STATE_TYPES.SUCCESS">
-      Should be success... {{state}}
-    </div>
-
-    <div v-if="state === STATE_TYPES.ERROR">
-      Should be error... {{state}}
-    </div>
-
-    <div v-if="state === STATE_TYPES.INFO">
-      Should be info... {{state}}
-    </div>
-
-    <button v-on:click="update">Update</button>
     <hr>
   </div>
 </template>
@@ -29,7 +30,7 @@
 <script>
   import { mapGetters } from 'vuex'
   import { log, logError } from '../../common/debug'
-  import { SET_CHECKLIST_ITEM_STATE } from '../../constants/vue/mutation-types'
+  import { MUTATION_TYPES } from '../../constants/vue/mutations'
   import ITEM_STATES from '../../constants/vue/checklists/item-states'
 
   export default {
@@ -59,7 +60,7 @@
     },
     methods: {
       update () {
-        this.$store.commit(SET_CHECKLIST_ITEM_STATE, {
+        this.$store.commit(MUTATION_TYPES.SET_CHECKLIST_ITEM_STATE, {
           type: this.type,
           newState: ITEM_STATES.INFO
         })
@@ -74,6 +75,9 @@
       },
       valid () {
         return this.validator()
+      },
+      protectionMode () {
+        return this.$store.getters.protectionMode
       },
     }
   }
