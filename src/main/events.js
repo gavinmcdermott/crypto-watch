@@ -47,9 +47,15 @@ export default (mainWindow=null, createWindow=null) => {
 
   // Copy values
   ipcMain.on(EVENT_TYPES.CLIPBOARD_CHANGED, (opts) => {
+    console.log('CLIPBOARD VALUE CHANGED', opts)
     sendToWindow(EVENT_TYPES.CLIPBOARD_CHANGED, opts)
   })
-  ipcMain.on(EVENT_TYPES.CLEAR_CLIPBOARD, clipboard.clear)
+  ipcMain.on(EVENT_TYPES.CLEAR_CLIPBOARD, () => {
+    console.log('CLEARING CLIPBOARD')
+    clipboard.writeText('')
+
+    setTimeout(() => console.log(clipboard.readText()), 2000)
+  })
 
   // Paste watchers
   ipcMain.on(EVENT_TYPES.START_PASTE_WATCH, keyboard.paste.startWatch)

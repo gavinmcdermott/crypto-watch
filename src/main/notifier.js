@@ -13,36 +13,30 @@ const notifyProcess = ({ currency, address }) => {
 }
 
 export const notifyUser = ({ currency, address }) => {
-  let foo  ={
-    title: 123,
-    body: 'udsaniaskjndksa'
+  // Notification.isSupported()
+  // TODO: LET PEOPLE KNOW IF THEY DON"T HAVE NOTIFICATIONS SUPPORTED
+  // OR: if they have alerts shut off on their mac after a certain time (happened to G)
+
+  let opts = {}
+  let notification = null
+
+  const charsToShow = 13
+  const addrLastIdx = address.length
+  const prettyAddr = `${address.slice(0,charsToShow)}...${address.slice(addrLastIdx-charsToShow, addrLastIdx)}`
+
+  switch (currency) {
+    case CURRENCIES.Ethereum.name:
+      opts.title = 'Ethereum address copied'
+      opts.body = `Click here to start a transation to\n${prettyAddr}`
+      notification = new Notification(opts)
+      break
+    default:
+      logError(`Unhandled notification attempt: ${currency}`)
+      break
   }
-  let v = new Notification(foo)
-  v.show()
 
-  // let opts = {}
-  // let notification = null
+  if (!notification) return logError(`Notification failed: ${currency}`)
 
-  // const charsToShow = 13
-  // const addrLastIdx = address.length
-  // const prettyAddr = `${address.slice(0,charsToShow)}...${address.slice(addrLastIdx-charsToShow, addrLastIdx)}`
-
-  // switch (currency) {
-  //   case CURRENCIES.Ethereum.name:
-  //     opts.title = 'Ethereum address copied'
-  //     opts.body = `Click here to start a transation to\n${prettyAddr}`
-  //     notification = new Notification(opts)
-  //     break
-  //   default:
-  //     logError(`Unhandled notification attempt: ${currency}`)
-  //     break
-  // }
-
-  // if (!notification) {
-  //   logError(`Notification failed: ${currency}`)
-  //   return
-  // }
-
-  // notification.show()
-  // notification.on('click', () => notifyProcess({ currency, address }))
+  notification.show()
+  notification.on('click', () => notifyProcess({ currency, address }))
 }

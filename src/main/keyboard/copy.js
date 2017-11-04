@@ -1,4 +1,5 @@
 import { clipboard, ipcMain } from 'electron'
+import _ from 'lodash'
 import { log, logError } from '../../common/debug'
 import { ethereum } from '../../common/crypto'
 import { CURRENCIES } from '../../constants/currencies'
@@ -35,7 +36,7 @@ export const startCopyWatch = () => {
 
   clipboardWatcher = setInterval(() => {
     const newClipboardValue = clipboard.readText()
-    const isOfInterest = newClipboardValue &&
+    const isOfInterest = _.isString(newClipboardValue) &&
                           newClipboardValue !== oldClipboardValue
 
     if (isOfInterest) {
