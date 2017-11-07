@@ -30,6 +30,9 @@ const NAMED_KEYS = [
 
 const KEYS_TO_BE_LOCKED = LETTERS.concat(NUMBERS, PUNCTUATIONS, FUNCS, NAMED_KEYS)
 
+
+// TODO: figure out the option/ctrl issue!!!!!
+// E.g.: control+H, control+U
 const KEY_MODIFIERS = [
   EMPTY_STR, // register an empty string to register individual keys themselves
   'Alt+',

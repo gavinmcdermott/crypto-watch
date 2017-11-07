@@ -17,7 +17,7 @@ export default (mainWindow=null, createWindow=null) => {
   }
 
   // Notify
-  ipcMain.on(EVENT_TYPES.NOTIFICATION_CLICKED, () => {
+  ipcMain.on(EVENT_TYPES.NOTIFICATION_CLICKED, (opts) => {
     sendToWindow(EVENT_TYPES.NOTIFICATION_CLICKED, opts)
     showWindow()
   })
@@ -34,41 +34,39 @@ export default (mainWindow=null, createWindow=null) => {
     sendToWindow(EVENT_TYPES.KEYBOARD_UNLOCKED)
   })
 
-  // Copy watchers
+  // Copy watch start
   ipcMain.on(EVENT_TYPES.START_COPY_WATCH, keyboard.copy.startWatch)
   ipcMain.on(EVENT_TYPES.COPY_WATCH_STARTED, () => {
     sendToWindow(EVENT_TYPES.COPY_WATCH_STARTED)
   })
 
+  // Copy watch stop
   ipcMain.on(EVENT_TYPES.STOP_COPY_WATCH, keyboard.copy.stopWatch)
   ipcMain.on(EVENT_TYPES.COPY_WATCH_STOPPED, () => {
     sendToWindow(EVENT_TYPES.COPY_WATCH_STOPPED)
   })
 
-  // Copy values
+  // Copy value changed
   ipcMain.on(EVENT_TYPES.CLIPBOARD_CHANGED, (opts) => {
-    console.log('CLIPBOARD VALUE CHANGED', opts)
     sendToWindow(EVENT_TYPES.CLIPBOARD_CHANGED, opts)
   })
-  ipcMain.on(EVENT_TYPES.CLEAR_CLIPBOARD, () => {
-    console.log('CLEARING CLIPBOARD')
-    clipboard.writeText('')
 
-    setTimeout(() => console.log(clipboard.readText()), 2000)
-  })
+  // Clear clipboard
+  ipcMain.on(EVENT_TYPES.CLEAR_CLIPBOARD, () => clipboard.writeText(''))
 
-  // Paste watchers
+  // Paste watch start
   ipcMain.on(EVENT_TYPES.START_PASTE_WATCH, keyboard.paste.startWatch)
   ipcMain.on(EVENT_TYPES.PASTE_WATCH_STARTED, () => {
     sendToWindow(EVENT_TYPES.PASTE_WATCH_STARTED)
   })
 
+  // Paste watch stop
   ipcMain.on(EVENT_TYPES.STOP_PASTE_WATCH, keyboard.paste.stopWatch)
   ipcMain.on(EVENT_TYPES.PASTE_WATCH_STOPPED, () => {
     sendToWindow(EVENT_TYPES.PASTE_WATCH_STOPPED)
   })
 
-  // Paste values
+  // Paste event lifecycle
   ipcMain.on(EVENT_TYPES.PASTE_STARTED, (opts) => {
     sendToWindow(EVENT_TYPES.PASTE_STARTED, opts)
     keyboard.lock()

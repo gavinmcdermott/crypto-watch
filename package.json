@@ -1,6 +1,6 @@
 {
-  "name": "vue_sample",
-  "productName": "vue_sample",
+  "name": "CoPilot",
+  "productName": "CoPilot",
   "version": "1.0.0",
   "description": "My Electron application description",
   "main": "src/main/index.js",
@@ -32,7 +32,7 @@
         "packageManager": "yarn"
       },
       "electronWinstallerConfig": {
-        "name": "vue_sample"
+        "name": "CoPilot"
       },
       "electronInstallerDebian": {},
       "electronInstallerRedhat": {},
@@ -42,7 +42,7 @@
       },
       "windowsStoreConfig": {
         "packageName": "",
-        "name": "vue_sample"
+        "name": "CoPilot"
       }
     }
   },
