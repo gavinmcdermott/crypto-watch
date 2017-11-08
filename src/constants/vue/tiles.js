@@ -1,0 +1,12 @@
+import { ETHEREUM } from '../currencies'
+
+export const ETHEREUM_TILES = {
+  ADDR_COPIED: 'ADDR_COPIED',
+  ADDR_VERIFIED: 'ADDR_VERIFIED',
+  TX_INFO_ENTERED: 'TX_INFO_ENTERED',
+  ADDR_PASTED: 'ADDR_PASTED',
+}
+
+export const TILES = {
+  [ETHEREUM.name]: ETHEREUM_TILES
+}

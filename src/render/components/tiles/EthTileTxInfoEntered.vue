@@ -1,24 +1,25 @@
 <template>
   <div>
     <h4>Tile: Eth Tx Info Entered</h4>
-    <p><button @click="toggleInfo">show info for this tile</button></p>
+    <!-- <p><button @click="toggleInfo">show info for this tile</button></p> -->
 
-    <div v-if="isWatchingPaste">
-      <p>Enter your tx infor before pasting the address...</p>
-    </div>
-    <div v-else>
-      <div v-if="lastPaste.wasValid">
-        Success: You (should have) entered the tx info before pasting
+    <div v-show="copilotIsActive">
+      <div v-if="isWatchingPaste">
+        <p>Enter your tx infor before pasting the address...</p>
       </div>
       <div v-else>
-        Error: Not sure what an error state is here...?
+        <div v-if="lastPaste.wasValid">
+          Success: You (should have) entered the tx info before pasting
+        </div>
+        <div v-else>
+          Error: Not sure what an error state is here...?
+        </div>
       </div>
     </div>
 
-
-
-
-
+    <div v-show="!copilotIsActive">
+      CoPilot is not yet active
+    </div>
 
     <div v-if="infoVisible">
       <p>This is some additional info about this tile.</p>
@@ -50,6 +51,9 @@
       },
       isWatchingPaste () {
         return this.$store.getters.keyboard.isWatchingPaste
+      },
+      copilotIsActive () {
+        return this.$store.getters.copilot.isActive
       },
     }
   }

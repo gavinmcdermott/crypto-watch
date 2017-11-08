@@ -36,6 +36,7 @@ const KEYS_TO_BE_LOCKED = LETTERS.concat(NUMBERS, PUNCTUATIONS, FUNCS, NAMED_KEY
 const KEY_MODIFIERS = [
   EMPTY_STR, // register an empty string to register individual keys themselves
   'Alt+',
+  'Ctrl+',
   'Shift+',
   'CmdOrCtrl+',
   'Shift+Alt+',
@@ -77,7 +78,7 @@ export const lockKeys = () => {
 
       if (!shouldLockCommand(commandString)) {
         let locked = globalShortcut.register(commandString, () => {
-          log(`Keypress prevented (${commandString}) at UTC:${new Date().getTime()}`)
+          // log(`Keypress prevented (${commandString}) at UTC:${new Date().getTime()}`)
         })
         if (!locked) logError(`Keyboard failed to lock ${commandString}`)
       }

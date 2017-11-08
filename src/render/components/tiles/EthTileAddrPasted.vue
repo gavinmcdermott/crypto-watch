@@ -1,19 +1,26 @@
 <template>
   <div>
     <h4>Tile: Eth Addr Pasted</h4>
-    <p><button @click="toggleInfo">show info for this tile</button></p>
+    <!-- <p><button @click="toggleInfo">show info for this tile</button></p> -->
 
-    <div v-if="isWatchingPaste">
-      <p>We're awaiting the keyboard paste event...</p>
-    </div>
-    <div v-else>
-      <div v-if="lastPaste.wasValid">
-        Success: The value pasted WAS what you wanted
+    <div v-show="copilotIsActive">
+      <div v-if="isWatchingPaste">
+        <p>We're awaiting the keyboard paste event...</p>
       </div>
       <div v-else>
-        Error: The value pasted WAS NOT what you wanted
+        <div v-if="lastPaste.wasValid">
+          Success: The value pasted WAS what you wanted
+        </div>
+        <div v-else>
+          Error: The value pasted WAS NOT what you wanted
+        </div>
       </div>
     </div>
+
+    <div v-show="!copilotIsActive">
+      CoPilot is not yet active
+    </div>
+
 
     <div v-if="infoVisible">
       <p>This is some additional info about this tile.</p>
@@ -45,6 +52,9 @@
       },
       isWatchingPaste () {
         return this.$store.getters.keyboard.isWatchingPaste
+      },
+      copilotIsActive () {
+        return this.$store.getters.copilot.isActive
       },
     }
   }

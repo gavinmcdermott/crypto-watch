@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <p>ProtectionMode running: {{protectionMode}}</p> -->
     <div v-for="(tile, index) in tiles">
       <eth-tile-addr-in-clipboard v-show="tile === TILES.ADDR_COPIED" />
       <eth-tile-addr-verified v-show="tile === TILES.ADDR_VERIFIED" />
@@ -16,10 +15,10 @@
   import EthTileTxInfoEntered from './EthTileTxInfoEntered'
   import EthTileAddrPasted from './EthTileAddrPasted'
   // import { ethereum } from '../../common/crypto'
-  import { ETHEREUM_CHECKLIST } from '../../../constants/vue/checklists/ethereum'
+  import { ETHEREUM_TILES } from '../../../constants/vue/tiles'
   // import { MUTATION_TYPES } from '../../constants/vue/mutations'
   // import { ETHERSCAM_ADDR_LIST_URL } from '../../constants/urls'
-  import { EVENT_TYPES } from '../../../constants/events'
+  // import { EVENT_TYPES } from '../../../constants/events'
 
   export default {
     name: 'App',
@@ -34,10 +33,10 @@
     },
     computed: {
       tiles () {
-        return this.$store.getters.checklist
+        return this.$store.getters.tiles
       },
       TILES () {
-        return ETHEREUM_CHECKLIST
+        return ETHEREUM_TILES
       },
       protectionMode () {
         return this.$store.getters.protectionMode

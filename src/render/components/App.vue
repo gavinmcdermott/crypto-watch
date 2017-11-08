@@ -1,7 +1,8 @@
 <template>
   <div>
     <app-header></app-header>
-    <app-body></app-body>
+    <!-- <app-body></app-body> -->
+    <router-view></router-view>
     <app-footer></app-footer>
     <!-- <button v-on:click="start">Start a Transaction</button> |
     <button v-on:click="stop">Stop a Transaction</button> -->
