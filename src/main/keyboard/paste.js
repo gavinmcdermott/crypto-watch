@@ -1,6 +1,7 @@
 import { clipboard, globalShortcut, ipcMain } from 'electron'
 import robot from 'robotjs'
 import _ from 'lodash'
+import { lockPaste, unlockPaste, PASTE_COMMAND } from './lock'
 import { log, logError } from '../../common/debug'
 import { EVENT_TYPES } from '../../constants/events'
 
@@ -9,38 +10,35 @@ import { EVENT_TYPES } from '../../constants/events'
 // - have ui reflect paste capture delay
 // - security checks on the pasted value (from memory, hashes, etc.)
 
-
-const THROTTLE_DELAY_MS = 4000
-const PASTE_CAPTURE_DELAY_MS = 500
+const THROTTLE_DELAY_MS = 3000
+const PASTE_CAPTURE_DELAY_MS = 35
 
 let pasteHandler = null
-
-// EXPORT THESE LOCKS TO THE LOCK FILE
-const PASTE_COMMAND = 'CmdOrCtrl+V'
-
-const lockPaste = () => globalShortcut.register(PASTE_COMMAND, () => {})
-const unlockPaste = () => globalShortcut.unregister(PASTE_COMMAND)
+let captureInProgress = false
 
 const capturePaste = () => {
+  if (captureInProgress) {
+    return
+  }
+
+  captureInProgress = true
   const value = clipboard.readText()
 
   ipcMain.emit(EVENT_TYPES.PASTE_STARTED, { value })
-  log(`paste started ${value}`)
+  log(`paste capture started ${value}`)
 
   // Immediately deregister the paste handler so we don't trigger
   // an infinite loop when we use robotjs to paste the value
   stopPasteWatch()
-  // lock paste so the user can't paste multiple values quickly
-  lockPaste()
 
   setTimeout(() => {
-    unlockPaste()
     robot.keyTap('v', 'command')
-    // lock the paste command until the keyboard is unlocked
     lockPaste()
 
     ipcMain.emit(EVENT_TYPES.PASTE_FINISHED, { value })
-    log(`paste triggered ${clipboard.readText()}`)
+    captureInProgress = false
+
+    log(`paste capture finished ${clipboard.readText()}`)
   }, PASTE_CAPTURE_DELAY_MS)
 }
 
@@ -55,6 +53,7 @@ export const startPasteWatch = () => {
   }
 
   pasteHandler = globalShortcut.register(PASTE_COMMAND, onPaste)
+  // pasteHandler = globalShortcut.register(PASTE_COMMAND, capturePaste)
 
   if (!pasteHandler) {
     logError(`Unable to register ${PASTE_COMMAND}`)

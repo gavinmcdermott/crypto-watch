@@ -11,6 +11,8 @@ console.log(globalShortcut)
 // NEED TO FIGURE OUT THE BUG HERE...
 // NEED TO FIGURE OUT THE BUG HERE...
 
+export const PASTE_COMMAND = 'CmdOrCtrl+V'
+
 const EMPTY_STR = ''
 
 const LETTERS = [
@@ -64,7 +66,7 @@ const shouldLeaveCommandActive = (keyCommand) => {
   return leaveActive
 }
 
-export const lockKeys = () => {
+export const lockKeyboard = () => {
   KEY_MODIFIERS.forEach((keyModifier) => {
     // create a new iterator for each key modifier
     const keys = KEYS_TO_BE_LOCKED[Symbol.iterator]()
@@ -88,8 +90,18 @@ export const lockKeys = () => {
   log(`keyboard locked`)
 }
 
-export const unlockKeys = () => {
+export const unlockKeyboard = () => {
   globalShortcut.unregisterAll()
   ipcMain.emit(EVENT_TYPES.KEYBOARD_UNLOCKED)
   log(`keyboard unlocked`)
+}
+
+export const lockPaste = () => {
+  globalShortcut.register(PASTE_COMMAND, () => {})
+  log(`paste locked`)
+}
+
+export const unlockPaste = () => {
+  globalShortcut.unregister(PASTE_COMMAND)
+  log(`paste unlocked`)
 }
