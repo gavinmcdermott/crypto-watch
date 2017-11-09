@@ -13,14 +13,14 @@ const state = {
   paste: {
     inProgress: false,
     lastEvent: {
-      wasValid: false,
+      // wasSecure: false,
       value: null
     }
   },
   copy: {
     lastEvent: {
       value: null,
-      addressType: null,
+      // replacedValue: null,
     }
   },
 }
@@ -43,16 +43,14 @@ const mutations = {
   [MUTATION_TYPES.CHANGE_PASTE_WATCHER] (state, { isWatching }) {
     state.keyboard.isWatchingPaste = isWatching
   },
-  [MUTATION_TYPES.CHANGE_PASTE_VALUE] (state, { inProgress, value, wasValid }) {
+  [MUTATION_TYPES.CHANGE_PASTE_VALUE] (state, { inProgress, value, /*wasSecure*/ }) {
     state.paste.inProgress = inProgress
     state.paste.lastEvent.value = value
-    state.paste.lastEvent.wasValid = wasValid
+    // state.paste.lastEvent.wasSecure = wasSecure
   },
   [MUTATION_TYPES.CHANGE_COPY_VALUE] (state, { newValue, oldValue }) {
     state.copy.lastEvent.value = newValue
-    state.copy.lastEvent.addressType = ethereum.isAddress(newValue)
-                                        ? CURRENCIES.Ethereum.name
-                                        : null
+    // state.copy.lastEvent.replacedValue = oldValue
   },
 }
 

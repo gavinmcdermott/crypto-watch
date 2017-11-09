@@ -35,10 +35,10 @@ const KEYS_TO_BE_LOCKED = LETTERS.concat(NUMBERS, PUNCTUATIONS, FUNCS, NAMED_KEY
 // E.g.: control+H, control+U
 const KEY_MODIFIERS = [
   EMPTY_STR, // register an empty string to register individual keys themselves
-  'Alt+',
-  'Ctrl+',
-  'Shift+',
   'CmdOrCtrl+',
+  'Ctrl+',
+  'Alt+',
+  'Shift+',
   'Shift+Alt+',
   'Shift+CmdOrCtrl+',
 ]
@@ -56,7 +56,7 @@ const KEYS_TO_LEAVE_ACTIVE = [
   'Right',
 ]
 
-const shouldLockCommand = (keyCommand) => {
+const shouldLeaveCommandActive = (keyCommand) => {
   let leaveActive = false
   KEYS_TO_LEAVE_ACTIVE.forEach((cmd) => {
     if (cmd === keyCommand) leaveActive = true
@@ -76,7 +76,7 @@ export const lockKeys = () => {
         commandString = `${keyModifier}${key}`
       }
 
-      if (!shouldLockCommand(commandString)) {
+      if (!shouldLeaveCommandActive(commandString)) {
         let locked = globalShortcut.register(commandString, () => {
           // log(`Keypress prevented (${commandString}) at UTC:${new Date().getTime()}`)
         })

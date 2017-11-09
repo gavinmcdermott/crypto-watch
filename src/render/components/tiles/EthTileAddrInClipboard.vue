@@ -1,19 +1,14 @@
 <template>
   <div>
-    <h4>Tile: Eth Addr In Clipboard</h4>
+    <h4>ADDR: 0x0A860fbdbb2A9acB0fE1d7C7da1b35C2cF1bE751</h4>
     <!-- <p><button @click="toggleInfo">show info for this tile</button></p> -->
-
-    <div v-show="copilotIsActive">
-      <div v-if="lastCopy.addressType">
-        Success: The last value copied is a valid Ethereum Address
-      </div>
-      <div v-else>
-        Error: The last value copied is not a valid Ethereum Address
-      </div>
+    <div id="success" v-if="validAddress">
+      Valid Ethereum address in your clipboard
+      <br>=> {{clipboardValue}}
     </div>
-
-    <div v-show="!copilotIsActive">
-      CoPilot is not yet active
+    <div id="error" v-else>
+      Invalid Ethereum address in your clipboard
+      <br>=> {{clipboardValue}}
     </div>
 
     <div v-if="infoVisible">
@@ -25,8 +20,11 @@
 
 <script>
   import { log, logError } from '../../../common/debug'
+  import { ethereum } from '../../../common/crypto'
+  import { CURRENCIES } from '../../../constants/currencies'
   // import { MUTATION_TYPES } from '../../constants/vue/mutations'
-  // import { ITEM_STATES } from '../../constants/vue/checklists/items'
+
+  let isTransacting
 
   export default {
     name: 'eth-tile-addr-in-clipboard',
@@ -35,22 +33,37 @@
         infoVisible: false
       }
     },
+    mounted () {
+
+    },
+    destroy () {
+
+    },
     methods: {
       toggleInfo () {
         return this.infoVisible = !this.infoVisible
       }
     },
     computed: {
-      lastCopy () {
-        return this.$store.getters.copy.lastEvent
+      validAddress () {
+        const lastCopy = this.$store.getters.copy.lastEvent.value
+        return ethereum.isAddress(lastCopy) ? true : false
       },
-      copilotIsActive () {
-        return this.$store.getters.copilot.isActive
+      clipboardValue () {
+        return this.$store.getters.copy.lastEvent.value
       },
+      // copilotIsActive () {
+      //   return this.$store.getters.copilot.isActive
+      // },
     }
   }
 </script>
 
 <style scoped>
-
+  #success {
+    background-color: #aeecae
+  }
+  #error {
+    background-color: #ff3b63
+  }
 </style>

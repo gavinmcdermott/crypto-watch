@@ -54,10 +54,10 @@ export default (store) => {
   })
 
   // Paste finished
-  ipcRenderer.on(EVENT_TYPES.PASTE_FINISHED, (event, { value, valid }) => {
+  ipcRenderer.on(EVENT_TYPES.PASTE_FINISHED, (event, { value, secure }) => {
     const data = {
       inProgress: false,
-      wasValid: valid,
+      // wasSecure: secure,
       value,
     }
     store.commit(MUTATION_TYPES.CHANGE_PASTE_VALUE, data)

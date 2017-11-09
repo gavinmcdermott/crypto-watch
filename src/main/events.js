@@ -52,6 +52,7 @@ export default (mainWindow=null, createWindow=null) => {
   })
 
   // Clear clipboard
+  // TODO: add this api to copy
   ipcMain.on(EVENT_TYPES.CLEAR_CLIPBOARD, () => clipboard.writeText(''))
 
   // Paste watch start

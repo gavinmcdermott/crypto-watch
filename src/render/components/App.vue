@@ -1,27 +1,25 @@
 <template>
   <div>
-    <app-header></app-header>
-    <!-- <app-body></app-body> -->
+    <!-- <app-header></app-header> -->
     <router-view></router-view>
-    <app-footer></app-footer>
-    <!-- <button v-on:click="start">Start a Transaction</button> |
-    <button v-on:click="stop">Stop a Transaction</button> -->
+    <!-- <app-footer></app-footer> -->
+    <!-- <button v-on:click="stop">Stop a Transaction</button> -->
   </div>
 </template>
 
 <script>
   import { ipcRenderer } from 'electron'
-  import AppHeader from './AppHeader'
-  import AppBody from './AppBody'
-  import AppFooter from './AppFooter'
+  // import AppHeader from './AppHeader'
+  // import AppBody from './AppBody'
+  // import AppFooter from './AppFooter'
   import { EVENT_TYPES } from '../../constants/events'
 
   export default {
     name: 'App',
     components: {
-      AppHeader,
-      AppBody,
-      AppFooter,
+      // AppHeader,
+      // AppBody,
+      // AppFooter,
     },
     // mounted () {
     //   ipcRenderer.on(EVENT_TYPES.VALUE_PASTED, (event, data) => {
@@ -29,14 +27,14 @@
     //     // this.$store.commit(SET_CLIPBOARD, data)
     //   })
     // },
-    // methods: {
-    //   start () {
-    //     ipcRenderer.send(EVENT_TYPES.START_PASTE_WATCH)
-    //   },
-    //   stop () {
-    //     ipcRenderer.send(EVENT_TYPES.STOP_PASTE_WATCH)
-    //   },
-    // }
+    methods: {
+      // start () {
+      //   this.$router.push('/transact')
+      // },
+      // stop () {
+      //   ipcRenderer.send(EVENT_TYPES.STOP_PASTE_WATCH)
+      // },
+    }
   }
 </script>
 

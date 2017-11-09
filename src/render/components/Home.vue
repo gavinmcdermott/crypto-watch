@@ -1,6 +1,7 @@
 <template>
   <div>
-    <eth-tiles></eth-tiles>
+    <h2>You're using Copilot</h2>
+    <button v-on:click="start">Start a Transaction</button>
   </div>
 </template>
 
@@ -21,8 +22,10 @@
       // })
     },
     methods: {
-
-    },
+      start () {
+        this.$router.push('/transact')
+      },
+    }
   }
 </script>
 
