@@ -1,6 +1,5 @@
 import { clipboard, globalShortcut, ipcMain } from 'electron'
 import robot from 'robotjs'
-import _ from 'lodash'
 import { lockPaste, unlockPaste, PASTE_COMMAND } from './lock'
 import { log, logError } from '../../common/debug'
 import { EVENT_TYPES } from '../../constants/events'
@@ -10,8 +9,7 @@ import { EVENT_TYPES } from '../../constants/events'
 // - have ui reflect paste capture delay
 // - security checks on the pasted value (from memory, hashes, etc.)
 
-const THROTTLE_DELAY_MS = 3000
-const PASTE_CAPTURE_DELAY_MS = 35
+const PASTE_CAPTURE_DELAY_MS = 25
 
 let pasteHandler = null
 let captureInProgress = false
@@ -42,18 +40,13 @@ const capturePaste = () => {
   }, PASTE_CAPTURE_DELAY_MS)
 }
 
-// throttle the paste capture command to prevent
-// multiple pastes in quick succession
-const onPaste = _.throttle(capturePaste, THROTTLE_DELAY_MS, { leading: true })
-
 export const startPasteWatch = () => {
   if (pasteHandler) {
     log(`paste handler already registered`)
     return
   }
 
-  pasteHandler = globalShortcut.register(PASTE_COMMAND, onPaste)
-  // pasteHandler = globalShortcut.register(PASTE_COMMAND, capturePaste)
+  pasteHandler = globalShortcut.register(PASTE_COMMAND, capturePaste)
 
   if (!pasteHandler) {
     logError(`Unable to register ${PASTE_COMMAND}`)
