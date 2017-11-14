@@ -1,35 +1,29 @@
 <template>
   <div>
-    <h4>Tile: Eth Addr Verified</h4>
-    <!-- <p><button @click="toggleInfo">show info for this tile</button></p> -->
+    <!-- <h4>Verified Address</h4> -->
 
-    <div v-show="copilotIsActive">
-      <div v-show="!lastCopy.addressType">
-        Error: The value in the clipboard is not an Ethereum address
+    <div v-show="validAddress">
+      <div id="error" v-if="possibleScamAddress">
+        Ethereum address in your clipboard is a known scam address
       </div>
-      <div v-show="lastCopy.addressType">
-        <div v-if="possibleScamAddress">
-          Error: The value in the clipboard is a known scam address
-        </div>
-        <div v-else>
-          Success: The value in the clipboard is not a scam
-        </div>
+      <div id="success" v-else>
+        Ethereum address in your clipboard is not a scam
       </div>
     </div>
 
-    <div v-show="!copilotIsActive">
-      CoPilot is not yet active
+    <div v-show="!validAddress">
+      <div id="error">
+        Invalid Ethereum address in your clipboard (verified)
+      </div>
     </div>
 
-    <div v-if="infoVisible">
-      <p>This is some additional info about this tile.</p>
-    </div>
     <hr>
   </div>
 </template>
 
 <script>
   import axios from 'axios'
+  import { ethereum } from '../../../common/crypto'
   import { log, logError } from '../../../common/debug'
   import { ETHERSCAM_ADDR_LIST_URL } from '../../../constants/urls'
   // import { MUTATION_TYPES } from '../../constants/vue/mutations'
@@ -39,8 +33,7 @@
     name: 'eth-tile-addr-verified',
     data () {
       return {
-        infoVisible: false,
-        scamAddressList: null,
+        scamAddressList: [],
       }
     },
     mounted () {
@@ -48,26 +41,25 @@
         .then(response => this.scamAddressList = Object.keys(response.data))
         .catch(e => console.log('HANDLE CLIENT ERRORS GRACEFULLY:', e))
     },
-    methods: {
-      toggleInfo () {
-        return this.infoVisible = !this.infoVisible
-      }
-    },
+    methods: {},
     computed: {
+      validAddress () {
+        const clipboardVal = this.$store.getters.copy.lastEvent.value
+        return ethereum.isAddress(clipboardVal)
+      },
       possibleScamAddress () {
-        const lastCopy = this.$store.getters.copy.lastEvent
-        return lastCopy.addressType && this.scamAddressList.includes(lastCopy.value)
-      },
-      lastCopy () {
-        return this.$store.getters.copy.lastEvent
-      },
-      copilotIsActive () {
-        return this.$store.getters.copilot.isActive
+        const clipboardVal = this.$store.getters.copy.lastEvent.value
+        return this.scamAddressList.includes(clipboardVal)
       },
     }
   }
 </script>
 
 <style scoped>
-
+  #success {
+    background-color: #aeecae
+  }
+  #error {
+    background-color: #ff3b63
+  }
 </style>

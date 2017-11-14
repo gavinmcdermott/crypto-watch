@@ -13,14 +13,12 @@ const state = {
   paste: {
     inProgress: false,
     lastEvent: {
-      // wasSecure: false,
       value: null
     }
   },
   copy: {
     lastEvent: {
       value: null,
-      // replacedValue: null,
     }
   },
 }
@@ -43,14 +41,14 @@ const mutations = {
   [MUTATION_TYPES.CHANGE_PASTE_WATCHER] (state, { isWatching }) {
     state.keyboard.isWatchingPaste = isWatching
   },
-  [MUTATION_TYPES.CHANGE_PASTE_VALUE] (state, { inProgress, value, /*wasSecure*/ }) {
+  [MUTATION_TYPES.CHANGE_PASTE_PROGRESS] (state, { inProgress }) {
     state.paste.inProgress = inProgress
+  },
+  [MUTATION_TYPES.CHANGE_PASTE_VALUE] (state, { value }) {
     state.paste.lastEvent.value = value
-    // state.paste.lastEvent.wasSecure = wasSecure
   },
   [MUTATION_TYPES.CHANGE_COPY_VALUE] (state, { newValue, oldValue }) {
     state.copy.lastEvent.value = newValue
-    // state.copy.lastEvent.replacedValue = oldValue
   },
 }
 

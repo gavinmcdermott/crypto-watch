@@ -1,5 +1,6 @@
 import { clipboard, globalShortcut, ipcMain } from 'electron'
 import robot from 'robotjs'
+// import _ from 'lodash'
 import { lockPaste, unlockPaste, PASTE_COMMAND } from './lock'
 import { log, logError } from '../../common/debug'
 import { EVENT_TYPES } from '../../constants/events'
@@ -9,7 +10,7 @@ import { EVENT_TYPES } from '../../constants/events'
 // - have ui reflect paste capture delay
 // - security checks on the pasted value (from memory, hashes, etc.)
 
-const PASTE_CAPTURE_DELAY_MS = 25
+const PASTE_DELAY_MS = 105  // keep this above 100 to capture the paste
 
 let pasteHandler = null
 let captureInProgress = false
@@ -22,7 +23,7 @@ const capturePaste = () => {
   captureInProgress = true
   const value = clipboard.readText()
 
-  ipcMain.emit(EVENT_TYPES.PASTE_STARTED, { value })
+  ipcMain.emit(EVENT_TYPES.PASTE_STARTED)
   log(`paste capture started ${value}`)
 
   // Immediately deregister the paste handler so we don't trigger
@@ -33,11 +34,12 @@ const capturePaste = () => {
     robot.keyTap('v', 'command')
     lockPaste()
 
-    ipcMain.emit(EVENT_TYPES.PASTE_FINISHED, { value })
+    ipcMain.emit(EVENT_TYPES.PASTE_FINISHED)
+    ipcMain.emit(EVENT_TYPES.CHANGE_PASTE_VALUE, { value })
     captureInProgress = false
 
     log(`paste capture finished ${clipboard.readText()}`)
-  }, PASTE_CAPTURE_DELAY_MS)
+  }, PASTE_DELAY_MS)
 }
 
 export const startPasteWatch = () => {
@@ -58,8 +60,9 @@ export const startPasteWatch = () => {
 }
 
 export const stopPasteWatch = () => {
-  pasteHandler = null
   unlockPaste()
+  pasteHandler = null
   ipcMain.emit(EVENT_TYPES.PASTE_WATCH_STOPPED)
+  ipcMain.emit(EVENT_TYPES.CHANGE_PASTE_VALUE, { value: null })
   log(`paste handler deregistered`)
 }

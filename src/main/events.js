@@ -68,11 +68,14 @@ export default (mainWindow=null, createWindow=null) => {
   })
 
   // Paste event lifecycle
-  ipcMain.on(EVENT_TYPES.PASTE_STARTED, (opts) => {
-    sendToWindow(EVENT_TYPES.PASTE_STARTED, opts)
+  ipcMain.on(EVENT_TYPES.PASTE_STARTED, () => {
+    sendToWindow(EVENT_TYPES.PASTE_STARTED)
     keyboard.lock()
   })
-  ipcMain.on(EVENT_TYPES.PASTE_FINISHED, (opts) => {
-    sendToWindow(EVENT_TYPES.PASTE_FINISHED, opts)
+  ipcMain.on(EVENT_TYPES.PASTE_FINISHED, () => {
+    sendToWindow(EVENT_TYPES.PASTE_FINISHED)
+  })
+  ipcMain.on(EVENT_TYPES.CHANGE_PASTE_VALUE, (opts) => {
+    sendToWindow(EVENT_TYPES.CHANGE_PASTE_VALUE, opts)
   })
 }

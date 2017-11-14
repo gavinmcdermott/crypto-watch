@@ -1,10 +1,13 @@
 <template>
   <div>
+    <h4>ADDR: 0x0A860fbdbb2A9acB0fE1d7C7da1b35C2cF1bE751</h4>
+    <p>Current clipboard value: {{clipboardValue}}</p>
+
     <div v-for="(tile, index) in tiles">
       <eth-tile-addr-in-clipboard v-show="tile === TILES.ADDR_COPIED" />
-      <!-- <eth-tile-addr-verified v-show="tile === TILES.ADDR_VERIFIED" /> -->
-      <!-- <eth-tile-tx-info-entered v-show="tile === TILES.TX_INFO_ENTERED" /> -->
-      <!-- <eth-tile-addr-pasted v-show="tile === TILES.ADDR_PASTED" /> -->
+      <eth-tile-addr-verified v-show="tile === TILES.ADDR_VERIFIED" />
+      <eth-tile-tx-info-entered v-show="tile === TILES.TX_INFO_ENTERED" />
+      <eth-tile-addr-pasted v-show="tile === TILES.ADDR_PASTED" />
     </div>
   </div>
 </template>
@@ -20,6 +23,8 @@
   // import { ETHERSCAM_ADDR_LIST_URL } from '../../constants/urls'
   // import { EVENT_TYPES } from '../../../constants/events'
 
+
+  console.log(EthTileAddrPasted)
   export default {
     name: 'App',
     components: {
@@ -38,9 +43,9 @@
       TILES () {
         return ETHEREUM_TILES
       },
-      // protectionMode () {
-      //   return this.$store.getters.protectionMode
-      // },
+      clipboardValue () {
+        return this.$store.getters.copy.lastEvent.value
+      },
     }
   }
 </script>

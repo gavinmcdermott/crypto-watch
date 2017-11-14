@@ -1,64 +1,55 @@
 <template>
   <div>
-    <h4>Tile: Eth Tx Info Entered</h4>
-    <!-- <p><button @click="toggleInfo">show info for this tile</button></p> -->
+    <!-- <h4>Valid Tx Info</h4> -->
 
-    <div v-show="copilotIsActive">
-      <div v-if="isWatchingPaste">
-        <p>Enter your tx infor before pasting the address...</p>
-      </div>
-      <div v-else>
-        <div v-if="lastPaste.wasValid">
-          Success: You (should have) entered the tx info before pasting
-        </div>
-        <div v-else>
-          Error: Not sure what an error state is here...?
-        </div>
+    <div v-show="!isTransacting">
+      <div id="error">
+        <p>Waiting for you to start a transaction (tx entered)</p>
       </div>
     </div>
 
-    <div v-show="!copilotIsActive">
-      CoPilot is not yet active
+    <div v-show="isTransacting">
+      <div id="success" v-if="wasValidPaste">
+        You successfully entered your transaction information
+      </div>
+      <div id="error" v-else>
+        Ahh! Something mutated was pasted!
+      </div>
     </div>
 
-    <div v-if="infoVisible">
-      <p>This is some additional info about this tile.</p>
-    </div>
     <hr>
   </div>
 </template>
 
 <script>
   import { log, logError } from '../../../common/debug'
+  import { ethereum } from '../../../common/crypto'
   // import { MUTATION_TYPES } from '../../constants/vue/mutations'
   // import { ITEM_STATES } from '../../constants/vue/checklists/items'
 
   export default {
     name: 'eth-tile-tx-info-entered',
-    data () {
-      return {
-        infoVisible: false,
-      }
-    },
-    methods: {
-      toggleInfo () {
-        return this.infoVisible = !this.infoVisible
-      }
-    },
+    methods: {},
     computed: {
-      lastPaste () {
-        return this.$store.getters.paste.lastEvent
+      pasteValue () {
+        return this.$store.getters.paste.lastEvent.value
       },
-      isWatchingPaste () {
-        return this.$store.getters.keyboard.isWatchingPaste
+      wasValidPaste () {
+        const lastPasteValue = this.$store.getters.paste.lastEvent.value
+        return ethereum.isAddress(lastPasteValue)
       },
-      copilotIsActive () {
-        return this.$store.getters.copilot.isActive
+      isTransacting () {
+        return this.$store.getters.isTransacting
       },
     }
   }
 </script>
 
 <style scoped>
-
+  #success {
+    background-color: #aeecae
+  }
+  #error {
+    background-color: #ff3b63
+  }
 </style>

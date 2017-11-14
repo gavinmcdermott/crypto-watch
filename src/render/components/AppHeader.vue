@@ -23,7 +23,7 @@
         // - check for valid address in clipboard
         // - check if already activated
         ipcRenderer.send(EVENT_TYPES.START_PASTE_WATCH)
-        // this.$store.commit(MUTATION_TYPES.CHANGE_COPILOT_IS_ACTIVE, true)
+        this.$store.commit(MUTATION_TYPES.CHANGE_APP_IS_TRANSACTING, true)
       },
       deactivate () {
         // Do a few things here,
@@ -33,7 +33,7 @@
         ipcRenderer.send(EVENT_TYPES.CLEAR_CLIPBOARD)
         ipcRenderer.send(EVENT_TYPES.UNLOCK_KEYBOARD)
 
-        // this.$store.commit(MUTATION_TYPES.CHANGE_COPILOT_IS_ACTIVE, false)
+        this.$store.commit(MUTATION_TYPES.CHANGE_APP_IS_TRANSACTING, false)
       },
     },
     computed: {

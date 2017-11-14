@@ -2,6 +2,7 @@ import { ipcRenderer } from 'electron'
 import { EVENT_TYPES } from '../../../constants/events'
 import { MUTATION_TYPES } from '../../../constants/vue/mutations'
 
+// Register all incoming IPC-Renderer events for the app
 export default (store) => {
 
   // Keyboard Locked
@@ -50,16 +51,17 @@ export default (store) => {
   // Paste started
   ipcRenderer.on(EVENT_TYPES.PASTE_STARTED, () => {
     const data = { inProgress: true }
-    store.commit(MUTATION_TYPES.CHANGE_PASTE_VALUE, data)
+    store.commit(MUTATION_TYPES.CHANGE_PASTE_PROGRESS, data)
   })
 
   // Paste finished
-  ipcRenderer.on(EVENT_TYPES.PASTE_FINISHED, (event, { value, secure }) => {
-    const data = {
-      inProgress: false,
-      // wasSecure: secure,
-      value,
-    }
+  ipcRenderer.on(EVENT_TYPES.PASTE_FINISHED, () => {
+    const data = { inProgress: false }
+    store.commit(MUTATION_TYPES.CHANGE_PASTE_PROGRESS, data)
+  })
+
+  // Paste value changes
+  ipcRenderer.on(EVENT_TYPES.CHANGE_PASTE_VALUE, (event, data) => {
     store.commit(MUTATION_TYPES.CHANGE_PASTE_VALUE, data)
   })
 
