@@ -9,10 +9,10 @@ Vue.use(VueRouter)
 // either be an actual component constructor created via
 // `Vue.extend()`, or just a component options object.
 const routes = [
-  { path: '/', component: Home },
+  { path: '/home', component: Home },
   { path: '/transact', component: Transact },
 ]
 
 export default new VueRouter({
-  routes
+  routes,
 })
