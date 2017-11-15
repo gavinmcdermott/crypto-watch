@@ -7,6 +7,8 @@ export default (store) => {
 
   store.subscribe((mutation, state) => {
     switch (mutation.type) {
+
+      // Toggle the necessary watchers/values when a TX is started or stopped
       case MUTATION_TYPES.CHANGE_TRANSACTION:
         if (mutation.payload.inProgress) {
           ipcRenderer.send(EVENT_TYPES.START_PASTE_WATCH)
@@ -17,12 +19,13 @@ export default (store) => {
         ipcRenderer.send(EVENT_TYPES.UNLOCK_KEYBOARD)
         break
 
+      // Start or stop a TX based on a change to the clipboard
       case MUTATION_TYPES.CHANGE_COPY_VALUE:
-        let inProgress = store.getters.transaction.inProgress
+        let txInProgress = store.getters.transaction.inProgress
         let newValue = mutation.payload.newValue
         let validAddress = ethereum.isAddress(newValue)
 
-        if (inProgress) {
+        if (txInProgress) {
           store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, {
             inProgress: false,
             error: `The value in the clipboard unexpectedly changed to "${newValue}"`,
@@ -30,7 +33,7 @@ export default (store) => {
           return
         }
 
-        if (!inProgress && validAddress) {
+        if (validAddress && !txInProgress) {
           store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, {
             inProgress: true,
             error: null,

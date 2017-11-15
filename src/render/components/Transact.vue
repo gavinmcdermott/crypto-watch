@@ -2,7 +2,7 @@
   <div>
 
     <h4>CoPilot: Transaction Support Page</h4>
-    <button v-on:click="goToHome">Go Home</button>
+    <button v-on:click="goToHome">Home</button>
     <hr>
 
     <div v-show="hasError">
