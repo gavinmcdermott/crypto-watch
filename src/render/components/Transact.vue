@@ -1,17 +1,35 @@
 <template>
   <div>
-    <p><b>Is transacting: {{isTransacting}}</b></p>
+
+    <h4>CoPilot: Transaction Support Page</h4>
+    <button v-on:click="goToHome">Go Home</button>
+    <hr>
+
+    <div v-show="hasError">
+      <p>Error: {{transaction.error}}</p>
+      <button @click="reset">Reset CoPilot</button>
+    </div>
+
     <div v-show="isTransacting">
-      <button @click="stopTransacting">Cancel This Transaction</button>
+      <h3>Use the checklist below to support your transaction</h3>
+      <button @click="stopTransacting">Disable CoPilot</button>
+
+      <eth-tiles></eth-tiles>
     </div>
 
     <div v-show="!isTransacting">
-      <button @click="startTransacting">Start Transacting with Copilot</button>
+      <div v-if="!validAddress">
+        <h3>Copy a valid Ethereum address to start a new transaction</h3>
+      </div>
+      <div v-else>
+        <h3>A valid Ethereum address is in your clipboard.</h3>
+        <button @click="startTransacting">Enable CoPilot</button>
+      </div>
     </div>
 
-    <!-- <app-header></app-header> -->
-    <eth-tiles></eth-tiles>
-    <!-- <app-footer></app-footer> -->
+    <div v-show="wasValidPaste">
+      <button @click="stopTransacting">Transaction Successfully Sent</button>
+    </div>
 
   </div>
 </template>
@@ -23,38 +41,56 @@
   import AppFooter from './AppFooter'
   import { EVENT_TYPES } from '../../constants/events'
   import { MUTATION_TYPES } from '../../constants/vue/mutations'
+  import { ethereum } from '../../common/crypto'
 
   export default {
     name: 'app-body',
     components: {
-      // AppHeader,
       EthTiles,
-      // AppFooter,
     },
     mounted () {
-      const foo = this.$store.getters.copy.lastEvent.value
-      console.log('changes', foo)
+      if (this.validAddress) {
+        this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, { inProgress: true })
+      }
     },
     computed: {
       isTransacting () {
-        return this.$store.getters.isTransacting
+        return this.$store.getters.transaction.inProgress
+      },
+      hasError () {
+        return this.$store.getters.transaction.error !== null
+      },
+      transaction () {
+        return this.$store.getters.transaction
+      },
+      validAddress () {
+        const lastCopy = this.$store.getters.copy.lastEvent.value
+        return ethereum.isAddress(lastCopy)
+      },
+      clipboardValue () {
+        return this.$store.getters.copy.lastEvent.value
+      },
+      wasValidPaste () {
+        const lastPasteValue = this.$store.getters.paste.lastEvent.value
+        return ethereum.isAddress(lastPasteValue)
       },
     },
     methods: {
-      home () {
+      goToHome () {
+        this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, { inProgress: false })
         this.$router.push('/')
       },
+      reset () {
+        this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, {
+          inProgress: false,
+          error: null
+        })
+      },
       startTransacting () {
-        ipcRenderer.send(EVENT_TYPES.START_PASTE_WATCH)
-
-        this.$store.commit(MUTATION_TYPES.CHANGE_APP_IS_TRANSACTING, true)
+        this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, { inProgress: true })
       },
       stopTransacting () {
-        ipcRenderer.send(EVENT_TYPES.STOP_PASTE_WATCH)
-        ipcRenderer.send(EVENT_TYPES.CLEAR_CLIPBOARD)
-        ipcRenderer.send(EVENT_TYPES.UNLOCK_KEYBOARD)
-
-        this.$store.commit(MUTATION_TYPES.CHANGE_APP_IS_TRANSACTING, false)
+        this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, { inProgress: false })
       },
     },
   }

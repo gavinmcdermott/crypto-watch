@@ -17,7 +17,6 @@
       </div>
     </div>
 
-    <hr>
   </div>
 </template>
 
@@ -57,9 +56,19 @@
 
 <style scoped>
   #success {
-    background-color: #aeecae
+    background-color: #aeecae;
+    height: 50px;
+    text-align: center;
+    display: block;
+    padding-top: 40px;
+    margin-bottom: 15px;
   }
   #error {
-    background-color: #ff3b63
+    background-color: #ff3b63;
+    height: 50px;
+    text-align: center;
+    display: block;
+    padding-top: 40px;
+    margin-bottom: 15px;
   }
 </style>

@@ -4,7 +4,7 @@ import ipcEvents from './plugins/ipc-events'
 import storeSubscriptions from './plugins/store-subscriptions'
 import currencies from './modules/currencies'
 import keyboard from './modules/keyboard'
-import app from './modules/app'
+import transactions from './modules/transactions'
 import tiles from './modules/tiles'
 
 Vue.use(Vuex)
@@ -16,7 +16,7 @@ export default new Vuex.Store({
   modules: {
     currencies,
     keyboard,
-    app,
+    transactions,
     tiles,
   },
   strict: debug,

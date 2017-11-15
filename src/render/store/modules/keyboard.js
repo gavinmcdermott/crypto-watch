@@ -19,6 +19,7 @@ const state = {
   copy: {
     lastEvent: {
       value: null,
+      replacedValue: null,
     }
   },
 }
@@ -49,6 +50,7 @@ const mutations = {
   },
   [MUTATION_TYPES.CHANGE_COPY_VALUE] (state, { newValue, oldValue }) {
     state.copy.lastEvent.value = newValue
+    state.copy.lastEvent.replacedValue = oldValue
   },
 }
 

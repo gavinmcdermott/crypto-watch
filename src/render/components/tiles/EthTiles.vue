@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h4>ADDR: 0x0A860fbdbb2A9acB0fE1d7C7da1b35C2cF1bE751</h4>
-    <p>Current clipboard value: {{clipboardValue}}</p>
+    <p>Current value in clipboard: <b>{{clipboardValue}}</b></p>
 
     <div v-for="(tile, index) in tiles">
       <eth-tile-addr-in-clipboard v-show="tile === TILES.ADDR_COPIED" />
@@ -23,8 +22,6 @@
   // import { ETHERSCAM_ADDR_LIST_URL } from '../../constants/urls'
   // import { EVENT_TYPES } from '../../../constants/events'
 
-
-  console.log(EthTileAddrPasted)
   export default {
     name: 'App',
     components: {
