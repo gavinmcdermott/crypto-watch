@@ -1,44 +1,65 @@
 <template>
-  <div>
-    <!-- <h4>Valid Tx Info</h4> -->
+  <div class="tile outer-tile" v-bind:class="outerTileStates">
+    <div class="inner-tile">
 
-    <div v-show="!isTransacting">
-      <div id="error">
-        <p>Waiting for you to start a transaction (tx entered)</p>
+      <div class="row">
+        <div class="col-12">
+
+          <svg class="tile-icon" v-bind:class="iconStates">
+            <use xlink:href="render/static/icon-currency.svg#icon" />
+          </svg>
+
+          <span v-show="isTransacting">
+            <span v-show="isWatchingPaste">
+              Enter tx details before pasting the recipient address
+            </span>
+
+            <span v-show="!isWatchingPaste">
+              <span v-if="wasValidPaste">Transaction details successfully entered</span>
+              <span v-else>The address pasted does not match!</span>
+            </span>
+          </span>
+
+          <span v-show="!isTransacting">...use best practices</span>
+
+        </div>
       </div>
+
     </div>
-
-    <div v-show="isTransacting">
-      <div id="success" v-if="wasValidPaste">
-        You successfully entered your transaction information
-      </div>
-      <div id="error" v-else>
-        Ahh! Something mutated was pasted!
-      </div>
-    </div>
-
   </div>
 </template>
 
 <script>
-  import { log, logError } from '../../../common/debug'
-  import { ethereum } from '../../../common/crypto'
-  // import { MUTATION_TYPES } from '../../constants/vue/mutations'
-  // import { ITEM_STATES } from '../../constants/vue/checklists/items'
+  import { addressType } from '../../../common/crypto'
 
   export default {
-    name: 'eth-tile-tx-info-entered',
-    methods: {},
     computed: {
-      pasteValue () {
-        return this.$store.getters.paste.lastEvent.value
+      isWatchingPaste () {
+        return this.$store.getters.keyboard.isWatchingPaste
       },
       wasValidPaste () {
         const lastPasteValue = this.$store.getters.paste.lastEvent.value
-        return ethereum.isAddress(lastPasteValue)
+        return addressType(lastPasteValue)
       },
       isTransacting () {
         return this.$store.getters.transaction.inProgress
+      },
+      outerTileStates () {
+        return {
+          'outer-tile__success': this.isTransacting
+            && !this.isWatchingPaste
+            && this.wasValidPaste,
+          'outer-tile__error': this.isTransacting
+            && !this.isWatchingPaste
+            && !this.wasValidPaste,
+        }
+      },
+      iconStates () {
+        return {
+          'tile-icon__active': this.isTransacting,
+          'tile-icon__inactive': !this.isTransacting
+            || (this.isTransacting && this.isWatchingPaste),
+        }
       },
     }
   }

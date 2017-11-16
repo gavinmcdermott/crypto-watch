@@ -37,18 +37,18 @@
 
 
 
-      <!-- <div v-show="isTransacting">
-        <button v-show="!wasValidPaste" @click="disableTxSupport">Reset CoPilot</button>
-        <button v-show="wasValidPaste" @click="disableTxSupport">My Transaction Was Sent</button>
-
-        <p>
+      <div v-show="isTransacting">
+        <button @click="disableTxSupport">Reset CoPilot</button>
+<!--         <button v-show="wasValidPaste" @click="disableTxSupport">My Transaction Was Sent</button>
+ -->
+<!--         <p>
           Keyboard Status:
           <span v-if="keyboard.isLocked">LOCKED</span>
           <span v-if="!keyboard.isLocked">UNLOCKED</span>
         </p>
 
-        <eth-tiles></eth-tiles>
-      </div> -->
+ -->
+      </div>
 
 
   </div>
