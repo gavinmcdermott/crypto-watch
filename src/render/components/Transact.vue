@@ -1,34 +1,24 @@
 <template>
   <div>
 
-    <h4>CoPilot: Transaction Support Page</h4>
-    <button v-on:click="goToHome">Home</button>
-    <hr>
-
-    <div v-show="hasError">
-      <p>Error: {{transaction.error}}</p>
-      <button @click="reset">Reset CoPilot</button>
-    </div>
-
-    <div v-show="isTransacting">
-      <h3>Use the checklist below to support your transaction</h3>
-      <button @click="stopTransacting">Disable CoPilot</button>
-
-      <eth-tiles></eth-tiles>
-    </div>
+    <h3>Transaction Support</h3>
 
     <div v-show="!isTransacting">
-      <div v-if="!validAddress">
-        <h3>Copy a valid Ethereum address to start a new transaction</h3>
-      </div>
-      <div v-else>
-        <h3>A valid Ethereum address is in your clipboard.</h3>
-        <button @click="startTransacting">Enable CoPilot</button>
-      </div>
+      <p>Copy an Ethereum address to enable CoPilot transaction support.</p>
     </div>
 
-    <div v-show="wasValidPaste">
-      <button @click="stopTransacting">Transaction Successfully Sent</button>
+
+    <div v-show="isTransacting">
+      <button v-show="!wasValidPaste" @click="disableTxSupport">Reset CoPilot</button>
+      <button v-show="wasValidPaste" @click="disableTxSupport">My Transaction Was Sent</button>
+
+      <p>
+        Keyboard Status:
+        <span v-if="keyboard.isLocked">LOCKED</span>
+        <span v-if="!keyboard.isLocked">UNLOCKED</span>
+      </p>
+
+      <eth-tiles></eth-tiles>
     </div>
 
   </div>
@@ -41,61 +31,72 @@
   import AppFooter from './AppFooter'
   import { EVENT_TYPES } from '../../constants/events'
   import { MUTATION_TYPES } from '../../constants/vue/mutations'
-  import { ethereum } from '../../common/crypto'
+  import { addressType } from '../../common/crypto'
+
+  let killClipboardChangeWatch = null
 
   export default {
-    name: 'app-body',
     components: {
       EthTiles,
-    },
-    mounted () {
-      if (this.validAddress) {
-        this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, { inProgress: true })
-      }
     },
     computed: {
       isTransacting () {
         return this.$store.getters.transaction.inProgress
       },
-      hasError () {
-        return this.$store.getters.transaction.error !== null
-      },
-      transaction () {
-        return this.$store.getters.transaction
+      keyboard () {
+        return this.$store.getters.keyboard
       },
       validAddress () {
         const lastCopy = this.$store.getters.copy.lastEvent.value
-        return ethereum.isAddress(lastCopy)
-      },
-      clipboardValue () {
-        return this.$store.getters.copy.lastEvent.value
+        return addressType(lastCopy)
       },
       wasValidPaste () {
         const lastPasteValue = this.$store.getters.paste.lastEvent.value
-        return ethereum.isAddress(lastPasteValue)
+        return addressType(lastPasteValue)
       },
     },
     methods: {
-      goToHome () {
-        this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, { inProgress: false })
-        this.$router.push('/')
+      enableTxSupport () {
+        // Vue
+        this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, true)
+        this.$store.commit(MUTATION_TYPES.CHANGE_ERROR, { error: null })
+        // IPC
+        ipcRenderer.send(EVENT_TYPES.START_PASTE_WATCH)
       },
-      reset () {
-        this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, {
-          inProgress: false,
-          error: null
-        })
+      disableTxSupport () {
+        // Vue
+        this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, false)
+        // IPC
+        ipcRenderer.send(EVENT_TYPES.STOP_PASTE_WATCH)
+        ipcRenderer.send(EVENT_TYPES.CLEAR_CLIPBOARD)
+        ipcRenderer.send(EVENT_TYPES.UNLOCK_KEYBOARD)
       },
-      startTransacting () {
-        this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, { inProgress: true })
-      },
-      stopTransacting () {
-        this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, { inProgress: false })
-      },
+    },
+    mounted () {
+      if (this.validAddress) {
+        this.enableTxSupport()
+      }
+
+      killClipboardChangeWatch = this.$store.watch(
+        () => this.$store.getters.copy.lastEvent.value,
+        (newValue) => {
+          const txInProgress = this.$store.getters.transaction.inProgress
+          const validAddress = addressType(newValue)
+
+          if (txInProgress) {
+            const error = new Error(`Clipboard value unexpectedly changed!`)
+            this.$store.commit(MUTATION_TYPES.CHANGE_ERROR, { error })
+            this.disableTxSupport()
+          }
+          if (validAddress && !txInProgress) {
+            this.enableTxSupport()
+          }
+        }
+      )
+    },
+    beforeDestroy () {
+      // clean up all store listeners
+      if (killClipboardChangeWatch) killClipboardChangeWatch()
     },
   }
 </script>
-
-<style scoped>
-
-</style>

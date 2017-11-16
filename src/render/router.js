@@ -15,4 +15,5 @@ const routes = [
 
 export default new VueRouter({
   routes,
+  linkActiveClass: 'link--state-active'
 })

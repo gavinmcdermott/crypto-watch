@@ -5,7 +5,6 @@ import { CHANGE_TRANSACTION } from '../../../constants/vue/mutations'
 const state = {
   transaction: {
     inProgress: false,
-    error: null,
   }
 }
 
@@ -16,12 +15,9 @@ const getters = {
 
 // Mutations
 const mutations = {
-  [CHANGE_TRANSACTION] (state, { inProgress, error }) {
-    if (_.isBoolean(inProgress)) {
-      state.transaction.inProgress = inProgress
-    }
-    if (_.isString(error) || _.isNull(error)) {
-      state.transaction.error = error
+  [CHANGE_TRANSACTION] (state, bool) {
+    if (_.isBoolean(bool)) {
+      state.transaction.inProgress = bool
     }
   }
 }

@@ -1,5 +1,6 @@
 <template>
   <div>
+    App Links:
     <router-link :to="'/home'">Home</router-link>
     <router-link :to="'/transact'">Transact</router-link>
     <hr>
@@ -13,6 +14,11 @@
 
   export default {
     methods: {},
-    computed: {}
+    computed: {
+      // foo () {
+      //   console.log(this.$route.path)
+      //   return 123
+      // },
+    }
   }
 </script>

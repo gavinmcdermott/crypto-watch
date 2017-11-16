@@ -1,47 +1,33 @@
 <template>
   <div>
 
-    <h4>CoPilot: Home Page</h4>
-    <hr>
-
     <div v-show="validAddress">
-      <h3>A valid Ethereum address is in your clipboard.</h3>
-      <button v-on:click="goToTransact">Enable CoPilot for a new Transaction</button>
+      <h3>An Ethereum address is in your clipboard</h3>
+      <p><b>{{clipboardValue}}</b></p>
+      <router-link :to="'/transact'">Start a Transaction</router-link>
+      <p @click="openExternal">View on EtherScan</p>
     </div>
 
     <div v-show="!validAddress">
-      <h3>Get started by copying a valid Ethereum address</h3>
+      <h3>Copy an Ethereum address to use CoPilot</h3>
     </div>
-
-    <p>Current value in clipboard: <b>{{clipboardValue}}</b></p>
 
   </div>
 </template>
 
 <script>
-  import { ipcRenderer } from 'electron'
-  import EthTiles from './tiles/EthTiles'
-  import { ethereum } from '../../common/crypto'
-  import { EVENT_TYPES } from '../../constants/events'
-  import { CURRENCIES } from '../../constants/currencies'
+  import { shell } from 'electron'
+  import { addressType } from '../../common/crypto'
   import { MUTATION_TYPES } from '../../constants/vue/mutations'
 
   export default {
-    name: 'home',
-    components: {
-      EthTiles,
-    },
     mounted () {
-      // ipcRenderer.on(EVENT_TYPES.CLIPBOARD_CHANGED, (event, data) => {
-      //   this.$store.commit(MUTATION_TYPES.SET_CLIPBOARD, data)
-      // })
+      this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, false)
     },
     methods: {
-      goToTransact () {
-        this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, {
-          inProgress: true
-        })
-        this.$router.push('/transact')
+      openExternal () {
+        console.log('GOINGTO', `http://www.etherscan.io/address/${this.clipboardValue}`)
+        // shell.openExternal(`http://www.etherscan.io/address/${this.clipboardValue}`, { activate: true })
       },
     },
     computed: {
@@ -50,10 +36,7 @@
       },
       validAddress () {
         const clipboardValue = this.$store.getters.copy.lastEvent.value
-        return ethereum.isAddress(clipboardValue)
-      },
-      currency () {
-        return this.$store.getters.currency
+        return addressType(clipboardValue)
       },
     }
   }

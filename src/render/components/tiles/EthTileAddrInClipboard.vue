@@ -16,7 +16,6 @@
   import { log, logError } from '../../../common/debug'
   import { ethereum } from '../../../common/crypto'
   import { CURRENCIES } from '../../../constants/currencies'
-  // import { MUTATION_TYPES } from '../../constants/vue/mutations'
 
   let isTransacting
 
@@ -40,22 +39,3 @@
     }
   }
 </script>
-
-<style scoped>
-  #success {
-    background-color: #aeecae;
-    height: 50px;
-    text-align: center;
-    display: block;
-    padding-top: 40px;
-    margin-bottom: 15px;
-  }
-  #error {
-    background-color: #ff3b63;
-    height: 50px;
-    text-align: center;
-    display: block;
-    padding-top: 40px;
-    margin-bottom: 15px;
-  }
-</style>
