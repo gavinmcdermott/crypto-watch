@@ -1,25 +1,55 @@
 <template>
   <div>
 
-    <h3>Transaction Support</h3>
-
-    <div v-show="!isTransacting">
-      <p>Copy an Ethereum address to enable CoPilot transaction support.</p>
+    <div class="container">
+      <div class="row header">
+        <div class="col-12">
+          <h2>Address in Clipboard</h2>
+          <p v-show="validAddress">{{clipboardValue}}</p>
+          <p v-show="!validAddress">Copy an Ethereum address to get started</p>
+        </div>
+      </div>
     </div>
 
+    <eth-tiles></eth-tiles>
 
-    <div v-show="isTransacting">
-      <button v-show="!wasValidPaste" @click="disableTxSupport">Reset CoPilot</button>
-      <button v-show="wasValidPaste" @click="disableTxSupport">My Transaction Was Sent</button>
 
-      <p>
-        Keyboard Status:
-        <span v-if="keyboard.isLocked">LOCKED</span>
-        <span v-if="!keyboard.isLocked">UNLOCKED</span>
-      </p>
 
-      <eth-tiles></eth-tiles>
-    </div>
+
+
+
+
+
+
+
+
+
+        <!-- <button v-show="!wasValidPaste" @click="disableTxSupport">Reset CoPilot</button>
+        <button v-show="wasValidPaste" @click="disableTxSupport">My Transaction Was Sent</button> -->
+
+        <!-- <p>
+          Keyboard Status:
+          <span v-if="keyboard.isLocked">LOCKED</span>
+          <span v-if="!keyboard.isLocked">UNLOCKED</span>
+        </p> -->
+
+
+
+
+
+      <!-- <div v-show="isTransacting">
+        <button v-show="!wasValidPaste" @click="disableTxSupport">Reset CoPilot</button>
+        <button v-show="wasValidPaste" @click="disableTxSupport">My Transaction Was Sent</button>
+
+        <p>
+          Keyboard Status:
+          <span v-if="keyboard.isLocked">LOCKED</span>
+          <span v-if="!keyboard.isLocked">UNLOCKED</span>
+        </p>
+
+        <eth-tiles></eth-tiles>
+      </div> -->
+
 
   </div>
 </template>
@@ -49,6 +79,9 @@
       validAddress () {
         const lastCopy = this.$store.getters.copy.lastEvent.value
         return addressType(lastCopy)
+      },
+      clipboardValue () {
+        return this.$store.getters.copy.lastEvent.value
       },
       wasValidPaste () {
         const lastPasteValue = this.$store.getters.paste.lastEvent.value

@@ -1,9 +1,9 @@
 <template>
-  <div>
-    App Links:
-    <router-link :to="'/home'">Home</router-link>
-    <router-link :to="'/transact'">Transact</router-link>
-    <hr>
+  <div class="row">
+    <div class="main-nav col-1">
+      <router-link :to="'/home'">Home</router-link>
+      <router-link :to="'/transact'">Transact</router-link>
+    </div>
   </div>
 </template>
 

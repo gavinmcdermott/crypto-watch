@@ -1,40 +1,56 @@
 <template>
-  <div>
-    <!-- <h4>Valid Address</h4> -->
+  <div class="tile outer-tile" v-bind:class="outerTileStates">
+    <div class="inner-tile">
 
-    <div id="success" v-if="validAddress">
-      Valid Ethereum address in your clipboard
-    </div>
-    <div id="error" v-else>
-      Invalid Ethereum address in your clipboard (valid)
-    </div>
+      <div class="row">
+        <div class="col-12">
 
+          <svg class="tile-icon" v-bind:class="iconStates">
+            <use xlink:href="render/static/icon-clipboard.svg#icon" />
+          </svg>
+
+          <span v-show="isTransacting">
+            <span v-if="validAddress">Valid Ethereum address in clipboard</span>
+            <span v-else>Invalid Ethereum address in clipboard!</span>
+          </span>
+
+          <span v-show="!isTransacting">
+            <span>Awaiting a valid address to be copied</span>
+          </span>
+
+        </div>
+      </div>
+
+    </div>
   </div>
 </template>
 
 <script>
-  import { log, logError } from '../../../common/debug'
-  import { ethereum } from '../../../common/crypto'
-  import { CURRENCIES } from '../../../constants/currencies'
-
-  let isTransacting
+  import { addressType } from '../../../common/crypto'
 
   export default {
-    name: 'eth-tile-addr-in-clipboard',
-    mounted () {
-
-    },
-    destroy () {
-
-    },
-    methods: {},
     computed: {
       validAddress () {
         const lastCopy = this.$store.getters.copy.lastEvent.value
-        return ethereum.isAddress(lastCopy)
+        return addressType(lastCopy)
       },
       clipboardValue () {
         return this.$store.getters.copy.lastEvent.value
+      },
+      isTransacting () {
+        return this.$store.getters.transaction.inProgress
+      },
+      outerTileStates () {
+        return {
+          'outer-tile__success': this.isTransacting && this.validAddress,
+          'outer-tile__error': this.isTransacting && !this.validAddress,
+        }
+      },
+      iconStates () {
+        return {
+          'tile-icon__active': this.isTransacting,
+          'tile-icon__inactive': !this.isTransacting,
+        }
       },
     }
   }

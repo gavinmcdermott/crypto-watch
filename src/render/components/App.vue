@@ -1,6 +1,6 @@
 <template>
   <div>
-    <app-header></app-header>
+    <!-- <app-header></app-header> -->
     <errors></errors>
     <router-view></router-view>
   </div>
@@ -18,7 +18,7 @@
       Errors,
     },
     beforeCreate () {
-      this.$router.push('/home')
+      this.$router.push('/transact')
     },
     mounted () {
       this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, false)

@@ -1,7 +1,10 @@
 <template>
   <div v-show="hasError">
-    <p>{{errorMsg}}</p>
-    <button @click="clear">Reset Errors</button>
+    <div class="overlay"></div>
+    <div class="overlay-header">
+      <p>{{errorMsg}}</p>
+      <button @click="clear">Reset Errors</button>
+    </div>
   </div>
 </template>
 
