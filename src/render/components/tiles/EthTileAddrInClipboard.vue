@@ -9,12 +9,12 @@
             <use xlink:href="render/static/icon-clipboard.svg#icon" />
           </svg>
 
-          <span v-show="isTransacting">
-            <span v-if="validAddress">Valid Ethereum address in clipboard</span>
-            <span v-else>Invalid Ethereum address in clipboard!</span>
-          </span>
+          <h2 v-show="!isTransacting">Validate address</h2>
 
-          <span v-show="!isTransacting">CoPilot validates addresses</span>
+          <span v-show="isTransacting">
+            <h2 v-if="validAddress">Address validated</h2>
+            <h2 v-else>Invalid address!</h2>
+          </span>
 
         </div>
       </div>

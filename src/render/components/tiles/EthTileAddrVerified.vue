@@ -9,12 +9,12 @@
             <use xlink:href="render/static/icon-checkmark.svg#icon" />
           </svg>
 
-          <span v-show="isTransacting">
-            <span v-show="validAddress">The address not a known scam address</span>
-            <span v-show="possibleScamAddress">The address a known scam address!</span>
-          </span>
+          <h2 v-show="!isTransacting">Verify on EtherScam</h2>
 
-          <span v-show="!isTransacting">...alerts you to scams</span>
+          <span v-show="isTransacting">
+            <h2 v-show="validAddress">Verified on EtherScam</h2>
+            <h2 v-show="possibleScamAddress">Possible scam address!</h2>
+          </span>
 
         </div>
       </div>

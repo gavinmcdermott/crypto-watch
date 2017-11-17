@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <div v-for="(tile, index) in tiles">
       <eth-tile-addr-in-clipboard v-show="tile === TILES.ADDR_COPIED" />
@@ -33,3 +33,4 @@
     }
   }
 </script>
+ -->

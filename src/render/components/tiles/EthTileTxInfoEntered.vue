@@ -11,24 +11,21 @@
           </svg>
 
           <!-- Transaction not started -->
-          <span v-show="!transaction.inProgress">...shares best practices</span>
+          <h2 v-show="!transaction.inProgress">Enter tx details</h2>
 
           <!-- Transaction started -->
           <span v-show="transaction.inProgress">
             <!-- Base state -->
-            <span v-show="keyboard.isWatchingPaste">
-              Enter transaction details
-            </span>
+            <h2 v-show="keyboard.isWatchingPaste">Enter tx details</h2>
 
             <!-- Completion state -->
             <span v-show="!keyboard.isWatchingPaste">
 
-              <span v-show="paste.inProgress">
-                <span>Paste in progress...</span>
-              </span>
+              <h2 v-show="paste.inProgress">Paste in progress...</h2>
+
               <span v-show="!paste.inProgress">
-                <span v-if="wasValidPaste">Transaction details successfully entered</span>
-                <span v-else>The pasted address does not match the copied address!</span>
+                <h2 v-if="wasValidPaste">Tx details entered</h2>
+                <h2 v-else>Pasted address does not match!</h2>
               </span>
 
             </span>

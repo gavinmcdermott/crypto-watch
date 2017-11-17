@@ -1,9 +1,9 @@
 @import 'reset';
 
 $font-stack: 'Roboto', sans-serif;
-$font-sm: 13px;
-$font-md: 17px;
-$font-lg: 20px;
+$font-sm: 8px;
+$font-md: 14px;
+$font-lg: 16px;
 
 
 
@@ -14,9 +14,12 @@ $window-height: 660px;
 
 $height-main-nav: 60px;
 
-$button-height: 44px;
+$button-height: 20px;
 
-
+$tile-icon-height: 30px;
+$tile-icon-width: 30px;
+$tile-switch-height: 20px;
+$tile-height: 54px;
 
 
 
@@ -50,6 +53,7 @@ body {
   position: relative;
   white-space: nowrap;
   overflow: hidden;
+  color: $darkgray;
 }
 
 *, *:before, *:after {
@@ -57,17 +61,23 @@ body {
 }
 
 h1 {
-  font-weight: medium;
+  // font-weight: 500;
   color: $blue;
   font-size: $font-lg;
-  margin-bottom: 12px;
+  line-height: $font-lg;
+  margin-bottom: 16px;
 }
 
 h2 {
-  font-weight: medium;
+  // font-weight: 500;
   color: $blue;
   font-size: $font-md;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  display: inline;
+}
+
+p {
+  font-size: $font-md;
 }
 
 
@@ -107,8 +117,8 @@ h2 {
 
 
 button {
+  // border: 1px solid $gray;
   border: none;
-  outline: none;
   padding: 0px 20px;
   height: $button-height;
   line-height: $button-height;
@@ -119,6 +129,13 @@ button {
   text-align: center;
   cursor: pointer;
 }
+
+button.disabled {
+  color: $gray;
+  background-color: $white;
+  pointer-events: none;
+}
+
 
 
 
@@ -134,10 +151,19 @@ a {
 
 
 .header {
-  padding: 40px 0px;
+  padding: 24px 0px 24px 0px;
+  border-bottom: 1px solid $gray;
 }
 
-
+.header-callout {
+  letter-spacing: 2px;
+  white-space:normal;
+  font-family: monospace;
+  background-color: $white;
+  border-radius: 2px;
+  padding: 8px;
+  line-height: 20px;
+}
 
 
 
@@ -186,34 +212,39 @@ a {
 .tile {
   position: relative;
   font-weight: medium;
-  height: 90px;
-  line-height: 90px;
+  height: $tile-height;
+  line-height: $tile-height;
 }
 
 .outer-tile {
  color: $blue;
- // color: $white;
- // background-color: $blue;
  position: relative;
 }
 
 .outer-tile__success {
  background-color: $blue;
- color: $white;
 }
 
 .outer-tile__error {
  background-color: $red;
- color: $white;
 }
 
+.outer-tile__success,
+.outer-tile__error {
+  h2 {
+    color: $white
+  }
+}
 
 .inner-tile {
   @extend .container;
-  border-bottom: 2px solid $white;
+  border-bottom: 1px solid $white;
   height: inherit;
 }
 
+.borderless {
+  border: none;
+}
 
 
 
@@ -225,11 +256,12 @@ a {
 
 .tile-icon {
   display: inline-block;
-  width: 32px;
-  height: 32px;
+  width: $tile-icon-width;
+  height: $tile-icon-height;
   position: relative;
   top: 10px;
   margin-right: 6px;
+  transform: scale(0.7);
 }
 
 .tile-icon__active {
@@ -259,22 +291,25 @@ a {
 
 
 .switch {
+  pointer-events: none;
   display: inline-block;
-  border-radius: $button-height;
-  height: $button-height;
-  width: $button-height * 2;
+  border-radius: $tile-switch-height;
+  height: $tile-switch-height;
+  width: $tile-switch-height * 2;
   background: $gray;
+  position: relative;
 }
 
 .switch div {
-  height: $button-height;
-  width: $button-height;
+  pointer-events: none;
+  height: $tile-switch-height;
+  width: $tile-switch-height;
   border: 1px solid $gray;
-  border-radius: $button-height;
+  border-radius: $tile-switch-height;
   background: $white;
-  -webkit-transition: all 300ms;
-     -moz-transition: all 300ms;
-          transition: all 300ms;
+  -webkit-transition: all 150ms;
+     -moz-transition: all 150ms;
+          transition: all 150ms;
 }
 
 .switch.active {
@@ -289,6 +324,23 @@ a {
 
 
 
+.tile-switch {
+  top: 6px;
+  margin-right: 6px;
+  // height: $tile-icon-height;
+  // width: $tile-icon-width * 2;
+}
+
+// .tile-switch div {
+//   height: $tile-icon-height;
+//   width: $tile-icon-width;
+//   border: 1px solid $gray;
+//   border-radius: $button-height;
+//   background: $white;
+//   -webkit-transition: all 150ms;
+//      -moz-transition: all 150ms;
+//           transition: all 150ms;
+// }
 
 
 
@@ -299,6 +351,18 @@ a {
 
 
 
+
+
+
+
+
+.u-font--gray {
+  color: $gray;
+}
+
+.u-float--right {
+  float: right;
+}
 
 
 

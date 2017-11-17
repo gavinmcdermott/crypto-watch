@@ -1,66 +1,62 @@
 <template>
   <div>
 
-    <div class="container">
-      <div class="row header">
-        <div class="col-12">
-          <h2>Address in Clipboard</h2>
-          <p v-show="validAddress">{{clipboardValue}}</p>
-          <p v-show="!validAddress">Copy an Ethereum address to get started</p>
+    <div class="header">
+      <div class="container">
+
+        <div class="row">
+          <div class="col-12">
+            <h1>Address in Clipboard</h1>
+          </div>
         </div>
+
+        <div class="row">
+          <div class="col-12">
+            <div class="header-callout">
+              <span v-show="!validAddress">
+                Copy an Ethereum address to get started
+              </span>
+              <span v-show="validAddress">
+                <p>{{splitCopyValue[0]}}</p>
+                <p>{{splitCopyValue[1]}}</p>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="row">
+          <div class="col-12">
+            <label class="switch tile-switch" v-bind:class="{ 'active': keyboard.isLocked }">
+              <div></div>
+            </label>
+
+            <h2 v-if="keyboard.isLocked">Keyboard Locked</h2>
+            <h2 v-else class="u-font--gray">Keyboard Unlocked</h2>
+          </div>
+        </div> -->
+
       </div>
     </div>
 
-    <eth-tiles></eth-tiles>
-
-
-
-
-
-
-
-
-
-
-
-
-        <!-- <button v-show="!wasValidPaste" @click="disableTxSupport">Reset CoPilot</button>
-        <button v-show="wasValidPaste" @click="disableTxSupport">My Transaction Was Sent</button> -->
-
-        <!-- <p>
-          Keyboard Status:
-          <span v-if="keyboard.isLocked">LOCKED</span>
-          <span v-if="!keyboard.isLocked">UNLOCKED</span>
-        </p> -->
-
-
-
-
-
-      <div v-show="true">
-        <button @click="disableTxSupport">Reset CoPilot</button>
-
-        <label class="switch" v-bind:class="{ 'active': keyboard.isLocked }">
-          <div></div>
-        </label>
-<!--         <button v-show="wasValidPaste" @click="disableTxSupport">My Transaction Was Sent</button>
- -->
-<!--         <p>
-          Keyboard Status:
-          <span v-if="keyboard.isLocked">LOCKED</span>
-          <span v-if="!keyboard.isLocked">UNLOCKED</span>
-        </p>
-
- -->
-      </div>
-
+    <eth-tile-addr-in-clipboard />
+    <eth-tile-addr-verified />
+    <eth-tile-tx-info-entered />
+    <eth-tile-addr-pasted />
+    <eth-tile-tx-state />
 
   </div>
 </template>
 
 <script>
   import { ipcRenderer } from 'electron'
-  import EthTiles from './tiles/EthTiles'
+
+  import EthTileAddrInClipboard from './tiles/EthTileAddrInClipboard'
+  import EthTileAddrVerified from './tiles/EthTileAddrVerified'
+  import EthTileTxInfoEntered from './tiles/EthTileTxInfoEntered'
+  import EthTileAddrPasted from './tiles/EthTileAddrPasted'
+  import EthTileTxState from './tiles/EthTileTxState'
+
+  // import EthTiles from './tiles/EthTiles'
   import AppHeader from './AppHeader'
   import AppFooter from './AppFooter'
   import { EVENT_TYPES } from '../../constants/events'
@@ -69,38 +65,49 @@
 
   let killClipboardChangeWatch = null
 
+  const splitValue = (value) => {
+    const val = value || ""
+    const index = Math.floor(val.length / 2)
+    return [ val.substr(0, index), val.substr(index) ]
+  }
+
   export default {
     components: {
-      EthTiles,
+      // EthTiles,
+      EthTileAddrInClipboard,
+      EthTileAddrVerified,
+      EthTileTxInfoEntered,
+      EthTileAddrPasted,
+      EthTileTxState,
     },
     computed: {
-      isTransacting () {
-        return this.$store.getters.transaction.inProgress
+      transaction () {
+        return this.$store.getters.transaction
       },
       keyboard () {
         return this.$store.getters.keyboard
+      },
+      splitCopyValue () {
+        return splitValue(this.$store.getters.copy.lastEvent.value)
       },
       validAddress () {
         const lastCopy = this.$store.getters.copy.lastEvent.value
         return addressType(lastCopy)
       },
-      clipboardValue () {
-        return this.$store.getters.copy.lastEvent.value
-      },
-      wasValidPaste () {
-        const lastPasteValue = this.$store.getters.paste.lastEvent.value
-        return addressType(lastPasteValue)
-      },
+      // wasValidPaste () {
+      //   const lastPasteValue = this.$store.getters.paste.lastEvent.value
+      //   return addressType(lastPasteValue)
+      // },
     },
     methods: {
-      enableTxSupport () {
+      startTxWatch () {
         // Vue
         this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, true)
         this.$store.commit(MUTATION_TYPES.CHANGE_ERROR, { error: null })
         // IPC
         ipcRenderer.send(EVENT_TYPES.START_PASTE_WATCH)
       },
-      disableTxSupport () {
+      stopTxWatch () {
         // Vue
         this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, false)
         // IPC
@@ -111,7 +118,7 @@
     },
     mounted () {
       if (this.validAddress) {
-        this.enableTxSupport()
+        this.startTxWatch()
       }
 
       killClipboardChangeWatch = this.$store.watch(
@@ -123,10 +130,10 @@
           if (txInProgress) {
             const error = new Error(`Clipboard value unexpectedly changed!`)
             this.$store.commit(MUTATION_TYPES.CHANGE_ERROR, { error })
-            this.disableTxSupport()
+            this.stopTxWatch()
           }
           if (validAddress && !txInProgress) {
-            this.enableTxSupport()
+            this.startTxWatch()
           }
         }
       )

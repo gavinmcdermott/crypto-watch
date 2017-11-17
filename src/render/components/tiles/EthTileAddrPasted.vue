@@ -11,24 +11,21 @@
           </svg>
 
           <!-- Transaction not started -->
-          <span v-show="!transaction.inProgress">...and supports your workflow.</span>
+          <h2 v-show="!transaction.inProgress">Paste recipient</h2>
 
           <!-- Transaction started -->
           <span v-show="transaction.inProgress">
             <!-- Base state -->
-            <span v-show="keyboard.isWatchingPaste">
-              Paste the address last
-            </span>
+            <h2 v-show="keyboard.isWatchingPaste">Paste recipient last</h2>
 
             <!-- Completion state -->
             <span v-show="!keyboard.isWatchingPaste">
 
-              <span v-show="paste.inProgress">
-                <span>Paste in progress...</span>
-              </span>
+              <h2 v-show="paste.inProgress">Paste in progress...</h2>
+
               <span v-show="!paste.inProgress">
-                <span v-if="wasValidPaste">Pasted {{paste.lastEvent.value}}</span>
-                <span v-else>The pasted address does not match the copied address!</span>
+                <h2 v-if="wasValidPaste">Recipient pasted</h2>
+                <h2 v-else>Pasted address does not match!</h2>
               </span>
 
             </span>
