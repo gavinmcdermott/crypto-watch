@@ -22,16 +22,16 @@ let willQuitApp = false
 // Main Window creation
 const createWindow = async () => {
   // Create the browser window
-  // mainWindow = new BrowserWindow({
-  //   width: 1200,
-  //   height: 800,
-  //   show: false,
-  // })
   mainWindow = new BrowserWindow({
-    width: 460,
-    height: 660,
+    width: 1200,
+    height: 800,
     show: false,
   })
+  // mainWindow = new BrowserWindow({
+  //   width: 460,
+  //   height: 660,
+  //   show: false,
+  // })
 
   // load the index.html of the app
   mainWindow.loadURL(INDEX_HTML_PATH)
@@ -39,7 +39,7 @@ const createWindow = async () => {
   // Open the DevTools
   if (IS_DEV_MODE) {
     await installExtension(VUEJS_DEVTOOLS)
-    // mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
   }
 
   mainWindow.once('ready-to-show', () => {

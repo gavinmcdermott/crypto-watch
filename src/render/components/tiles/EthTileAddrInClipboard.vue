@@ -14,7 +14,7 @@
             <span v-else>Invalid Ethereum address in clipboard!</span>
           </span>
 
-          <span v-show="!isTransacting">CoPilot ensures that you use valid addresses</span>
+          <span v-show="!isTransacting">CoPilot validates addresses</span>
 
         </div>
       </div>

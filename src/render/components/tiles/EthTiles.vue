@@ -4,7 +4,7 @@
       <eth-tile-addr-in-clipboard v-show="tile === TILES.ADDR_COPIED" />
       <eth-tile-addr-verified v-show="tile === TILES.ADDR_VERIFIED" />
       <eth-tile-tx-info-entered v-show="tile === TILES.TX_INFO_ENTERED" />
-      <!-- <eth-tile-addr-pasted v-show="tile === TILES.ADDR_PASTED" /> -->
+      <eth-tile-addr-pasted v-show="tile === TILES.ADDR_PASTED" />
     </div>
   </div>
 </template>

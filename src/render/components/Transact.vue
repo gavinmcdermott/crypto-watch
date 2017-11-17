@@ -37,8 +37,12 @@
 
 
 
-      <div v-show="isTransacting">
+      <div v-show="true">
         <button @click="disableTxSupport">Reset CoPilot</button>
+
+        <label class="switch" v-bind:class="{ 'active': keyboard.isLocked }">
+          <div></div>
+        </label>
 <!--         <button v-show="wasValidPaste" @click="disableTxSupport">My Transaction Was Sent</button>
  -->
 <!--         <p>

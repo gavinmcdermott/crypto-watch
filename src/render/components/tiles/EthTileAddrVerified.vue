@@ -14,7 +14,7 @@
             <span v-show="possibleScamAddress">The address a known scam address!</span>
           </span>
 
-          <span v-show="!isTransacting">...avoid known scams</span>
+          <span v-show="!isTransacting">...alerts you to scams</span>
 
         </div>
       </div>

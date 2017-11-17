@@ -1,44 +1,99 @@
 <template>
-  <div>
-    <!-- <h4>Address Pasted</h4> -->
+  <div class="tile outer-tile" v-bind:class="outerTileStates">
+    <div class="inner-tile">
 
-    <div v-show="!isTransacting">
-      <div id="error">
-        <p>Waiting for you to start a transaction (pasted)</p>
+      <div class="row">
+        <div class="col-12">
+
+          <!-- Icon -->
+          <svg class="tile-icon" v-bind:class="iconStates">
+            <use xlink:href="render/static/icon-duplicate.svg#icon" />
+          </svg>
+
+          <!-- Transaction not started -->
+          <span v-show="!transaction.inProgress">...and supports your workflow.</span>
+
+          <!-- Transaction started -->
+          <span v-show="transaction.inProgress">
+            <!-- Base state -->
+            <span v-show="keyboard.isWatchingPaste">
+              Paste the address last
+            </span>
+
+            <!-- Completion state -->
+            <span v-show="!keyboard.isWatchingPaste">
+
+              <span v-show="paste.inProgress">
+                <span>Paste in progress...</span>
+              </span>
+              <span v-show="!paste.inProgress">
+                <span v-if="wasValidPaste">Pasted {{paste.lastEvent.value}}</span>
+                <span v-else>The pasted address does not match the copied address!</span>
+              </span>
+
+            </span>
+          </span>
+
+        </div>
       </div>
+
     </div>
-
-    <div v-show="isTransacting">
-      <div id="success" v-if="wasValidPaste">
-        You successfully pasted {{pasteValue}}
-      </div>
-      <div id="error" v-else>
-        The pasted value does not match what you copied
-      </div>
-    </div>
-
   </div>
 </template>
 
 <script>
-  import { log, logError } from '../../../common/debug'
-  import { ethereum } from '../../../common/crypto'
-  // import { MUTATION_TYPES } from '../../constants/vue/mutations'
-  // import { ITEM_STATES } from '../../constants/vue/checklists/items'
+  import { addressType } from '../../../common/crypto'
 
   export default {
-    name: 'eth-tile-addr-pasted',
-    methods: {},
     computed: {
-      pasteValue () {
-        return this.$store.getters.paste.lastEvent.value
+      keyboard () {
+        return this.$store.getters.keyboard
+      },
+      paste () {
+        return this.$store.getters.paste
+      },
+      transaction () {
+        return this.$store.getters.transaction
       },
       wasValidPaste () {
         const lastPasteValue = this.$store.getters.paste.lastEvent.value
-        return ethereum.isAddress(lastPasteValue)
+        return addressType(lastPasteValue)
       },
-      isTransacting () {
-        return this.$store.getters.transaction.inProgress
+      showTileSuccess () {
+        if (this.$store.getters.paste.inProgress) {
+          return false
+        }
+        if (!this.transaction.inProgress) {
+          return false
+        }
+        return this.keyboard.isLocked && this.wasValidPaste
+      },
+      showTileError () {
+        if (this.$store.getters.paste.inProgress) {
+          return false
+        }
+        if (!this.transaction.inProgress) {
+          return false
+        }
+        return this.keyboard.isLocked && !this.wasValidPaste
+      },
+      showIconActive () {
+        return this.keyboard.isLocked
+      },
+      showIconInactive () {
+        return !this.keyboard.isLocked
+      },
+      outerTileStates () {
+        return {
+          'outer-tile__success': this.showTileSuccess,
+          'outer-tile__error': this.showTileError,
+        }
+      },
+      iconStates () {
+        return {
+          'tile-icon__active': this.showIconActive,
+          'tile-icon__inactive': this.showIconInactive,
+        }
       },
     }
   }
