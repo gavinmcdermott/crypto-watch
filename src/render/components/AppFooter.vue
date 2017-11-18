@@ -1,7 +1,12 @@
 <template>
-  <div>
-    <h2>Footer action area</h2>
-    <hr>
+  <div class="footer">
+    <ul class="tabs">
+
+      <!-- TODO: Iterate through routes!! -->
+      <navigation-tab name="Transact"></navigation-tab>
+      <navigation-tab name="Home"></navigation-tab>
+
+    </ul>
   </div>
 </template>
 
@@ -9,12 +14,20 @@
   import { ipcRenderer } from 'electron'
   import { EVENT_TYPES } from '../../constants/events'
   import { MUTATION_TYPES } from '../../constants/vue/mutations'
+  import NavigationTab from './NavigationTab'
 
   export default {
-    name: 'app-footer',
+    components: {
+      NavigationTab,
+    },
+    methods: {
+      sendTo (path) {
+        this.$router.push({ path })
+      },
+      isActive (routeName) {
+        return this.$route.name === routeName
+      },
+    },
+    computed: {}
   }
 </script>
-
-<style scoped>
-
-</style>

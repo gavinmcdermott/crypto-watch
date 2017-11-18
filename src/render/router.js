@@ -9,8 +9,8 @@ Vue.use(VueRouter)
 // either be an actual component constructor created via
 // `Vue.extend()`, or just a component options object.
 const routes = [
-  { path: '/home', component: Home },
-  { path: '/transact', component: Transact },
+  { path: '/home', name: 'Home', component: Home },
+  { path: '/transact', name: 'Transact', component: Transact },
 ]
 
 export default new VueRouter({

@@ -1,27 +1,26 @@
 <template>
   <div>
-    <!-- <app-header></app-header> -->
     <errors></errors>
     <router-view></router-view>
+    <app-footer></app-footer>
   </div>
 </template>
 
 <script>
-  import AppHeader from './AppHeader'
+  import AppFooter from './AppFooter'
   import Errors from './Errors'
   import { MUTATION_TYPES } from '../../constants/vue/mutations'
 
   export default {
-    name: 'App',
     components: {
-      AppHeader,
+      AppFooter,
       Errors,
     },
     beforeCreate () {
-      this.$router.push('/transact')
+      this.$router.push('/home')
     },
     mounted () {
-      this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, false)
+      // this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, false)
     }
   }
 </script>

@@ -57,8 +57,8 @@
   import EthTileTxState from './tiles/EthTileTxState'
 
   // import EthTiles from './tiles/EthTiles'
-  import AppHeader from './AppHeader'
-  import AppFooter from './AppFooter'
+  // import AppHeader from './AppHeader'
+  // import AppFooter from './AppFooter'
   import { EVENT_TYPES } from '../../constants/events'
   import { MUTATION_TYPES } from '../../constants/vue/mutations'
   import { addressType } from '../../common/crypto'
