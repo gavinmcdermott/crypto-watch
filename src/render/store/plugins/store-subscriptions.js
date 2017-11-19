@@ -23,6 +23,7 @@ export default (store) => {
         axios.get(ETHERSCAN.GET_ADDR_BAL_URL(address))
           .then((response) => {
             store.commit(MUTATION_TYPES.UPDATE_ADDRESS_INFO, {
+              address,
               type: 'balance',
               result: response.data.result,
             })
@@ -36,6 +37,7 @@ export default (store) => {
         axios.get(ETHERSCAN.GET_ADDR_TX_URL(address))
           .then((response) => {
             store.commit(MUTATION_TYPES.UPDATE_ADDRESS_INFO, {
+              address,
               type: 'transactions',
               result: response.data.result,
             })
@@ -50,6 +52,7 @@ export default (store) => {
           .then((response) => {
             const scamAddressList = Object.keys(response.data)
             store.commit(MUTATION_TYPES.UPDATE_ADDRESS_INFO, {
+              address,
               type: 'verification',
               result: { isVerified: !scamAddressList.includes(address) }
             })

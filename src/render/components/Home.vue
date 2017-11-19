@@ -10,45 +10,29 @@
 
       <!-- Address clipboard -->
       <div class="section">
-
         <div class="row">
           <div class="col-12">
-            <address-callout v-bind:address="clipboardValue"></address-callout>
-
-            <!-- Scam address info -->
-            <span v-show="address.verification.fetched">
-              <p v-show="address.verification.isVerified" class="u-color--gray">
-                <svg viewBox="0 0 32 32" class="icon">
-                  <use xlink:href="render/static/icon-checkmark.svg#icon" />
-                </svg>
-                Verified by EtherScam DB
-              </p>
-              <p v-show="!address.verification.isVerified" class="u-color--gray">
-                <svg viewBox="0 0 32 32" class="icon"><use xlink:href="render/static/icon-checkmark.svg#icon" /></svg>
-                This is a recognized scam address!
-              </p>
-            </span>
+            <address-callout></address-callout>
+            <etherscam-badge></etherscam-badge>
           </div>
         </div>
-
       </div>
 
       <div v-show="addressInClipboard" class="section">
 
         <div class="row">
           <div class="col-12">
-
             <h4>Ether Balance</h4>
-            <div class="address-callout">
-              <span class="address-callout--text u--text__center"v-show="!address.balance.fetched">
-                -
-              </span>
-              <!-- TODO: Make a directive for Eth conversion -->
-              <span class="address-callout--text"v-show="address.balance.fetched">
-                {{address.balance.data}}
-              </span>
-            </div>
+            <balance-callout></balance-callout>
+          </div>
+        </div>
 
+        <div class="row">
+          <div class="col-12">
+            <h4>Recent Transactions</h4>
+            <ul>
+              <transaction-tile v-bind:transaction="tx" v-for="tx in address.transactions.data"></transaction-tile>
+            </ul>
           </div>
         </div>
 
@@ -116,10 +100,16 @@
   import { addressType, ethereum } from '../../common/crypto'
   import { ETHERSCAN } from '../../constants/urls'
   import AddressCallout from './address-utils/AddressCallout'
+  import BalanceCallout from './address-utils/BalanceCallout'
+  import TransactionTile from './address-utils/TransactionTile'
+  import EtherscamBadge from './badges/EtherscamBadge'
 
   export default {
     components: {
+      EtherscamBadge,
+      BalanceCallout,
       AddressCallout,
+      TransactionTile,
     },
     methods: {
       // fetches in here with error handling too :)
