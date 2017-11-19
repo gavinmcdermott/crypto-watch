@@ -1,6 +1,7 @@
 <template>
   <div>
-    <errors></errors>
+    <app-header></app-header>
+    <app-errors></app-errors>
     <router-view></router-view>
     <app-footer></app-footer>
   </div>
@@ -8,13 +9,15 @@
 
 <script>
   import AppFooter from './AppFooter'
-  import Errors from './Errors'
+  import AppHeader from './AppHeader'
+  import AppErrors from './AppErrors'
   import { MUTATION_TYPES } from '../../constants/vue/mutations'
 
   export default {
     components: {
+      AppHeader,
       AppFooter,
-      Errors,
+      AppErrors,
     },
     beforeCreate () {
       this.$router.push('/home')

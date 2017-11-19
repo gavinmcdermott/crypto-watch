@@ -1,7 +1,8 @@
 <template>
   <li>
-    <div class="tab--container">
-      <div @click="navigate" class="tab" v-bind:class="{ 'tab__active': isActive }">
+    <div class="tab--container" @click="navigate">
+      <div class="tab" v-bind:class="{ 'tab__active': isActive }">
+        <!-- extra div needed for css :after underline -->
         <div>
           {{name}}
         </div>

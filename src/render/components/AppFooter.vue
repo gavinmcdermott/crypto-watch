@@ -1,33 +1,27 @@
 <template>
   <div class="footer">
     <ul class="tabs">
-
-      <!-- TODO: Iterate through routes!! -->
-      <navigation-tab name="Transact"></navigation-tab>
-      <navigation-tab name="Home"></navigation-tab>
-
+      <!-- generate nav tabs based on route names -->
+      <navigation-tab v-for="name in routeNames" v-bind:name="name"></navigation-tab>
     </ul>
   </div>
 </template>
 
 <script>
-  import { ipcRenderer } from 'electron'
-  import { EVENT_TYPES } from '../../constants/events'
-  import { MUTATION_TYPES } from '../../constants/vue/mutations'
   import NavigationTab from './NavigationTab'
 
   export default {
     components: {
       NavigationTab,
     },
-    methods: {
-      sendTo (path) {
-        this.$router.push({ path })
+    computed: {
+      routeNames () {
+        let routeNames = []
+        for (var route of this.$router.options.routes) {
+          routeNames.push(route.name)
+        }
+        return routeNames
       },
-      isActive (routeName) {
-        return this.$route.name === routeName
-      },
-    },
-    computed: {}
+    }
   }
 </script>

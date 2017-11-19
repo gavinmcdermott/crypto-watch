@@ -72,8 +72,8 @@ $color-blue: #6F84E6;
 
 
 
-$vertical-spacing: 1.4rem;
-
+$row-vertical-spacing: .2rem;
+$section-vertical-spacing: 1.2rem;
 
 
 
@@ -190,7 +190,7 @@ p {
 }
 
 .body--container {
-  padding: $vertical-spacing 0;
+  padding: 1rem 0;
 }
 
 
@@ -279,20 +279,28 @@ p {
 
 
 
+
+
+
+
 .address-callout {
+  white-space: normal;
+  word-wrap: break-word;
   font-family: $font-mono;
   position: relative;
-  white-space: normal;
   color: $color-light-gray;
   background-color: $color-white;
   border-radius: 2px;
   padding: .5rem;
   line-height: 1.5rem;
   letter-spacing: .15rem;
-  // margin-bottom: .5rem;
+  margin-bottom: .5rem;
 }
 
-
+.address-callout--text {
+  width: 100%;
+  display: inline-block;
+}
 
 
 
@@ -469,42 +477,42 @@ a {
 
 
 
-.tile {
-  position: relative;
-  font-weight: medium;
-  height: $tile-height;
-  line-height: $tile-height;
-}
+// .tile {
+//   position: relative;
+//   font-weight: medium;
+//   height: $tile-height;
+//   line-height: $tile-height;
+// }
 
-.outer-tile {
- color: $blue;
- position: relative;
-}
+// .outer-tile {
+//  color: $blue;
+//  position: relative;
+// }
 
-.outer-tile__success {
- background-color: $blue;
-}
+// .outer-tile__success {
+//  background-color: $blue;
+// }
 
-.outer-tile__error {
- background-color: $red;
-}
+// .outer-tile__error {
+//  background-color: $red;
+// }
 
-.outer-tile__success,
-.outer-tile__error {
-  h2 {
-    color: $white
-  }
-}
+// .outer-tile__success,
+// .outer-tile__error {
+//   h2 {
+//     color: $white
+//   }
+// }
 
-.inner-tile {
-  @extend .container;
-  border-bottom: 1px solid $white;
-  height: inherit;
-}
+// .inner-tile {
+//   @extend .container;
+//   border-bottom: 1px solid $white;
+//   height: inherit;
+// }
 
-.borderless {
-  border: none;
-}
+// .borderless {
+//   border: none;
+// }
 
 
 
@@ -613,16 +621,28 @@ a {
 
 
 
-
-
-
-.u-font--gray {
-  color: $gray;
+.u--text__center {
+  text-align: center;
 }
 
-.u-float--right {
+.u--text__right {
+  text-align: right;
+}
+
+.u-float__right {
   float: right;
 }
+
+
+
+
+
+
+.u-color--gray {
+  color: $color-light-gray;
+}
+
+
 
 
 
@@ -645,15 +665,18 @@ $gutter: 4%;
   margin-right: auto;
 }
 
+.section {
+  margin-bottom: $section-vertical-spacing;
+}
+
 .row {
   position: relative;
   width: 100%;
-  margin-bottom: $vertical-spacing;
+  margin-bottom: $row-vertical-spacing;
 }
 
 .row [class^="col"] {
   float: left;
-  // margin: 0.5rem 2%;
   margin: 0% 2%;
   min-height: 0.125rem;
 }

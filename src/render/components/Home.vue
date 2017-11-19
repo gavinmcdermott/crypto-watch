@@ -1,97 +1,159 @@
 <template>
-  <div>
+  <div class="body">
+    <div class="container body--container">
 
-    <div class="header">
-      <h3>Transact</h3>
-    </div>
+      <div class="row">
+        <div class="col-12">
+          <h2>Address in Clipboard</h2>
+        </div>
+      </div>
 
-
-
-    <div class="body">
-      <div class="container body--container">
-
+      <!-- Address clipboard -->
+      <div class="section">
 
         <div class="row">
           <div class="col-12">
-            <h2>Address in Clipboard</h2>
-            <div class="address-callout">
-              0x7dDEcE90E00785c97da<br>
-              Fe08dF75f61786Fa4d47A
-            </div>
+            <address-callout v-bind:address="clipboardValue"></address-callout>
+
+            <!-- Scam address info -->
+            <span v-show="address.verification.fetched">
+              <p v-show="address.verification.isVerified" class="u-color--gray">
+                <svg viewBox="0 0 32 32" class="icon">
+                  <use xlink:href="render/static/icon-checkmark.svg#icon" />
+                </svg>
+                Verified by EtherScam DB
+              </p>
+              <p v-show="!address.verification.isVerified" class="u-color--gray">
+                <svg viewBox="0 0 32 32" class="icon"><use xlink:href="render/static/icon-checkmark.svg#icon" /></svg>
+                This is a recognized scam address!
+              </p>
+            </span>
           </div>
         </div>
 
+      </div>
+
+      <div v-show="addressInClipboard" class="section">
+
         <div class="row">
           <div class="col-12">
-            <h3>Information</h3>
-            <h4>Validity</h4>
-            <p>
-              <svg viewBox="0 0 32 32" class="icon">
-                <use xlink:href="render/static/icon-checkmark.svg#icon" />
-              </svg>
-              This is a valid Ethereum address
-            </p>
+
+            <h4>Ether Balance</h4>
+            <div class="address-callout">
+              <span class="address-callout--text u--text__center"v-show="!address.balance.fetched">
+                -
+              </span>
+              <!-- TODO: Make a directive for Eth conversion -->
+              <span class="address-callout--text"v-show="address.balance.fetched">
+                {{address.balance.data}}
+              </span>
+            </div>
 
           </div>
         </div>
 
       </div>
-    </div>
 
 
 
-    <div class="footer">
-      <ul class="tabs">
 
-        <li>
-          <div class="tab--container">
-            <div class="tab tab__active">
-              <div>
-                Tx
-              </div>
-            </div>
+
+
+
+
+
+      <!-- Recent transactions -->
+<!--       <div class="section">
+
+        <div class="row">
+          <div class="col-12">
+            <h3>Recent Transactions</h3>
           </div>
-        </li>
+        </div>
 
-        <li>
-          <div class="tab--container">
-            <div class="tab">
-              <div>
-                In
-              </div>
+        <div class="row">
+          <div class="col-12">
+
+            <div v-show="!address.transactions.fetched">
+              <p>-</p>
             </div>
+            <div v-show="validAddress">
+              <p v-show="address.transactions.fetched && !address.transactions.data">
+                No transaction history
+              </p>
+              <p v-show="address.transactions.fetched && address.transactions.data">
+                {{latestTxDate}}
+              </p>
+            </div>
+
           </div>
-        </li>
+        </div>
 
-      </ul>
+      </div>
+ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </div>
-
   </div>
 </template>
 
 <script>
-  // import { shell } from 'electron'
-  // import { addressType } from '../../common/crypto'
-  // import { MUTATION_TYPES } from '../../constants/vue/mutations'
+  import axios from 'axios'
+  import moment from 'moment'
+  import { addressType, ethereum } from '../../common/crypto'
+  import { ETHERSCAN } from '../../constants/urls'
+  import AddressCallout from './address-utils/AddressCallout'
 
   export default {
-    mounted () {
-      // this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, false)
+    components: {
+      AddressCallout,
     },
     methods: {
-      openExternal () {
-        // console.log('GOINGTO', `http://www.etherscan.io/address/${this.clipboardValue}`)
-        // shell.openExternal(`http://www.etherscan.io/address/${this.clipboardValue}`, { activate: true })
-      },
+      // fetches in here with error handling too :)
     },
     computed: {
-      // clipboardValue () {
-      //   return this.$store.getters.copy.lastEvent.value
+      clipboardValue () {
+        return this.$store.getters.copy.lastEvent.value
+      },
+      addressInClipboard () {
+        const lastCopy = this.$store.getters.copy.lastEvent.value
+        return addressType(lastCopy)
+      },
+      // latestTxDate () {
+      //   // TODO: Clean this up
+      //   if (!this.address.transactions.fetched) return
+      //   return moment(Number(this.address.transactions.data.timeStamp)*1000).format('MMMM Do YYYY, h:mm A')
       // },
-      // validAddress () {
-      //   const clipboardValue = this.$store.getters.copy.lastEvent.value
-      //   return addressType(clipboardValue)
-      // },
-    }
+      address () {
+        return this.$store.getters.address
+      },
+    },
   }
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

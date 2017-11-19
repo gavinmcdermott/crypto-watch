@@ -2,9 +2,14 @@ import ethUtils from 'web3-utils'
 import _ from 'lodash'
 import { CURRENCIES } from '../constants/currencies'
 
-// REMOVE
+const WEI_PER_ETHER = 1000000000000000000
+
+// THIS IS IN WEB3 ALSO
+const etherFromWei = (wei) => Number(wei) / WEI_PER_ETHER
+
 export const ethereum = {
-  isAddress: ethUtils.isAddress
+  isAddress: ethUtils.isAddress,
+  etherFromWei,
 }
 
 export const addressType = (testStr) => {
