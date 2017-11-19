@@ -3,7 +3,9 @@
 $font-stack: 'Roboto', sans-serif;
 $font-mono: 'Roboto Mono', monospace;
 
-$font-4: .7rem;
+
+
+$font-4: .8rem;
 $font-3: .95rem;
 $font-2: 1.1rem;
 $font-1: 1.3rem;
@@ -16,12 +18,15 @@ $window-height: 640px;
 
 $height-main-nav: 60px;
 
-$button-height: 20px;
+$button-height: 32px;
 
 $tile-icon-height: 30px;
 $tile-icon-width: 30px;
-$tile-switch-height: 20px;
+
 $tile-height: 54px;
+
+
+
 
 
 
@@ -68,7 +73,7 @@ $color-blue: #6F84E6;
 
 
 
-
+$toggle-height: 22px;
 
 
 
@@ -86,6 +91,10 @@ $icon-height: 14px;
 
 
 
+$animation-delay: .25s;
+
+
+
 
 
 
@@ -99,6 +108,8 @@ body {
   background: $lightgray;
   color: $color-dark-gray;
   font-family: $font-stack;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 *, *:before, *:after {
@@ -137,8 +148,9 @@ h4 {
 
 p {
   font-size: $font-4;
-  line-height: 1.2rem;
+  line-height: 1.3rem;
   white-space: normal;
+  margin-bottom: 1.3rem;
 }
 
 
@@ -295,6 +307,11 @@ p {
   line-height: 1.5rem;
   letter-spacing: .15rem;
   margin-bottom: .5rem;
+  min-height: 62px;
+
+  -webkit-transition: all 2s;
+     -moz-transition: all 2s;
+          transition: all 2s;
 }
 
 .callout--text {
@@ -303,6 +320,24 @@ p {
 }
 
 
+
+
+
+
+
+
+
+.callout--compare {
+  margin-top: -151px;
+  opacity: 0.5;
+  width: 96%;
+  position: absolute;
+
+
+  // -webkit-transform: translate3d(80%, 0, 0);
+  //    -moz-transform: translate3d(80%, 0, 0);
+  //         transform: translate3d(80%, 0, 0);
+}
 
 
 
@@ -387,15 +422,20 @@ p {
 button {
   // border: 1px solid $gray;
   border: none;
-  padding: 0px 20px;
+  padding: 0px 16px;
+  border-radius: 2px;
   height: $button-height;
-  line-height: $button-height;
-  border-radius: $button-height;
-  background-color: $white;
-  color: $blue;
-  font-size: $font-2;
+  // line-height: $button-height;
+  background-color: $color-light-gray;
+  color: $white;
+  font-size: 0.8rem;
   text-align: center;
   cursor: pointer;
+  display: inline-block;
+}
+
+button:hover {
+  // background-color: $color-light-gray;
 }
 
 button.disabled {
@@ -404,7 +444,9 @@ button.disabled {
   pointer-events: none;
 }
 
-
+button.button--full-width {
+  width: 100%
+}
 
 
 
@@ -554,30 +596,55 @@ a {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /** Switch
  -------------------------------------*/
 
 
 .switch {
-  pointer-events: none;
   display: inline-block;
-  border-radius: $tile-switch-height;
-  height: $tile-switch-height;
-  width: $tile-switch-height * 2;
+  cursor: pointer;
+  border-radius: $toggle-height;
+  height: $toggle-height;
+  width: $toggle-height * 1.8;
   background: $gray;
   position: relative;
 }
 
 .switch div {
-  pointer-events: none;
-  height: $tile-switch-height;
-  width: $tile-switch-height;
+  height: $toggle-height;
+  width: $toggle-height;
   border: 1px solid $gray;
-  border-radius: $tile-switch-height;
+  border-radius: $toggle-height;
   background: $white;
-  -webkit-transition: all 150ms;
-     -moz-transition: all 150ms;
-          transition: all 150ms;
+  -webkit-transition: all $animation-delay;
+     -moz-transition: all $animation-delay;
+          transition: all $animation-delay;
 }
 
 .switch.active {
@@ -585,9 +652,9 @@ a {
 }
 
 .switch.active div {
-  -webkit-transform: translate3d(100%, 0, 0);
-     -moz-transform: translate3d(100%, 0, 0);
-          transform: translate3d(100%, 0, 0);
+  -webkit-transform: translate3d(80%, 0, 0);
+     -moz-transform: translate3d(80%, 0, 0);
+          transform: translate3d(80%, 0, 0);
 }
 
 
@@ -644,7 +711,9 @@ a {
 
 
 
-
+.u-opacity--dim {
+  opacity: 0.7;
+}
 
 
 

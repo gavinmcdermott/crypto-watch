@@ -2,7 +2,13 @@
   <div>
     <app-header></app-header>
     <app-errors></app-errors>
-    <router-view></router-view>
+
+    <div class="body">
+      <div class="container body--container">
+        <router-view></router-view>
+      </div>
+    </div>
+
     <app-footer></app-footer>
   </div>
 </template>
@@ -20,7 +26,7 @@
       AppErrors,
     },
     beforeCreate () {
-      this.$router.push('/home')
+      this.$router.push('/information')
     },
     mounted () {
       // this.$store.commit(MUTATION_TYPES.CHANGE_TRANSACTION, false)

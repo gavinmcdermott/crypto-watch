@@ -6,6 +6,8 @@ const ETHERSCAN_API_KEY = '18IQY7FVNVK3KFQN3RV5ZNT15SVPPFED9S'
 export const ETHERSCAM_FULL_JSON_URL = `${ETHERSCAM_URL_BASE}/scams.json`
 export const ETHERSCAM_ADDR_LIST_URL = `${ETHERSCAM_URL_BASE}/addresses.json`
 
+const txFetchCount = 3
+
 // CHANGE THESE EXPORTS
 export const ETHERSCAM_DB = {
   ETHERSCAM_FULL_JSON_URL,
@@ -17,7 +19,7 @@ export const ETHERSCAN = {
     return `${ETHERSCAN_URL_BASE}?module=account&action=balance&address=${address}&tag=latest&apikey=${ETHERSCAN_API_KEY}`
   },
   GET_ADDR_TX_URL: (address) => {
-    return `${ETHERSCAN_URL_BASE}?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=5&sort=desc&ETHERSCAN_API_KEY={apiKey}`
+    return `${ETHERSCAN_URL_BASE}?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=${txFetchCount}&sort=desc&ETHERSCAN_API_KEY={apiKey}`
   }
 }
 

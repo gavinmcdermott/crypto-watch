@@ -1,9 +1,9 @@
 <template>
   <div class="callout">
-    <span class="callout--text" v-show="addrIsValid">
-      {{addrString}}
+    <span class="callout--text" v-show="addressIsValid">
+      {{address}}
     </span>
-    <span class="callout--text u--text__center" v-show="!addrIsValid">
+    <span class="callout--text u--text__center" v-show="!addressIsValid">
       -<br>-
     </span>
   </div>
@@ -13,12 +13,14 @@
   import { addressType } from '../../../common/crypto'
 
   export default {
+    props: {
+      address: {
+        required: true,
+      }
+    },
     computed: {
-      addrString () {
-        return this.$store.getters.address.address
-      },
-      addrIsValid () {
-        return addressType(this.$store.getters.address.address)
+      addressIsValid () {
+        return addressType(this.address)
       },
     }
   }

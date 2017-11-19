@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO: PASS ADDRESS IN TO THIS COMPONENT -->
   <span v-show="address.verification.fetched">
 
     <p v-show="address.verification.isVerified" class="u-color--gray">

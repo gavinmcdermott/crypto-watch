@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from './components/Home'
+import Information from './components/Information'
 import Transact from './components/Transact'
 
 Vue.use(VueRouter)
@@ -9,7 +9,7 @@ Vue.use(VueRouter)
 // either be an actual component constructor created via
 // `Vue.extend()`, or just a component options object.
 const routes = [
-  { path: '/home', name: 'Home', component: Home },
+  { path: '/information', name: 'Information', component: Information },
   { path: '/transact', name: 'Transact', component: Transact },
 ]
 

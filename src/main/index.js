@@ -22,32 +22,32 @@ let willQuitApp = false
 // Main Window creation
 const createWindow = async () => {
   // Create the browser window
-  mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 640,
-    show: false,
-  })
   // mainWindow = new BrowserWindow({
-  //   x: 10,
-  //   y: 32,
-  //   width: 310,
+  //   width: 1200,
   //   height: 640,
-  //   frame: false,
   //   show: false,
-  //   maximizable: false,
-  //   fullscreen: false,
-  //   fullscreenable: false,
-  //   title: 'CoPilot',
-  //   resizable: false,
   // })
+  mainWindow = new BrowserWindow({
+    x: 10,
+    y: 32,
+    width: 318,
+    height: 640,
+    frame: false,
+    show: false,
+    maximizable: false,
+    fullscreen: false,
+    fullscreenable: false,
+    title: 'CoPilot',
+    resizable: false,
+  })
 
   // load the index.html of the app
   mainWindow.loadURL(INDEX_HTML_PATH)
 
   // Open the DevTools
   if (IS_DEV_MODE) {
-    await installExtension(VUEJS_DEVTOOLS)
-    mainWindow.webContents.openDevTools()
+    // await installExtension(VUEJS_DEVTOOLS)
+    // mainWindow.webContents.openDevTools()
   }
 
   mainWindow.once('ready-to-show', () => {
