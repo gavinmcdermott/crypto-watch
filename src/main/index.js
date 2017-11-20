@@ -32,7 +32,7 @@ const createWindow = async () => {
     y: 32,
     width: 318,
     height: 640,
-    frame: false,
+    // frame: false,
     show: false,
     maximizable: false,
     fullscreen: false,

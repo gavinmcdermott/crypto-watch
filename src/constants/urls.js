@@ -19,7 +19,7 @@ export const ETHERSCAN = {
     return `${ETHERSCAN_URL_BASE}?module=account&action=balance&address=${address}&tag=latest&apikey=${ETHERSCAN_API_KEY}`
   },
   GET_ADDR_TX_URL: (address) => {
-    return `${ETHERSCAN_URL_BASE}?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=${txFetchCount}&sort=desc&ETHERSCAN_API_KEY={apiKey}`
+    return `${ETHERSCAN_URL_BASE}?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=${txFetchCount}&sort=desc&apiKey=${ETHERSCAN_API_KEY}`
   }
 }
 
